@@ -2,14 +2,10 @@ from fastapi import FastAPI
 import uvicorn
 import routes as RT
 from fastapi.middleware.cors import CORSMiddleware
+from tools.db import Database
+from config import *
 
-DESCRIPTION = "Rest API Implementation to scan NoSQL Databases"
-VERSION = "0.1"
-
-ORIGINS = [
-    "http://localhost",
-    "http://localhost:8080",
-]
+db = Database()
 
 app = FastAPI(
     title="NoSQL-Scanner API",
@@ -25,7 +21,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(RT.AUTH)
+app.include_router(RT.AUTHENTICATION)
 app.include_router(RT.SCAN)
 
 if __name__ == "__main__":
