@@ -1,17 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
-from pydantic import BaseModel, Field
-from tools.auth import User, Auth
+from tools.auth import User, Auth, JWTBearer
 from typing import Annotated
 
 ENDPOINT = "auth"
 
 ROUTER = APIRouter(prefix=f"/api/{ENDPOINT}", tags=[ENDPOINT])
 
-JWT_PERMISSION = Annotated[dict, Depends(Auth.JWTBearer())]
+JWT_PERMISSION = Depends(JWTBearer)
 
 
-@ROUTER.get("/", status_code=200)
-def main(auth_data: JWT_PERMISSION) -> dict:
+@ROUTER.get("/", status_code=200, dependencies=[JWT_PERMISSION])
+def main(auth_data:  Annotated[dict, JWT_PERMISSION]) -> dict:
     print(auth_data)
     return {"": "AUTH"}
 
