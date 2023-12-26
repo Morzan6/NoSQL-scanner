@@ -1,17 +1,17 @@
 import hashlib
 from tools.db import Database
 from pydantic import BaseModel, Field
-from fastapi import HTTPException, status, Request
+from fastapi import HTTPException, status, Request, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import jwt
 import time
 from typing import Dict
 from config import JWT_SECRET, JWT_ALGORITHM
 
-
 class User:
-
+    """Object to handle communication with user in database"""    
     class UserLoginSerializer(BaseModel):
+        """Data serializer for user login"""
         username: str = Field(pattern=r"[A-Za-z0-9_@!]+", max_length=100)
         password: str = Field(min_length=8)
 
@@ -20,6 +20,11 @@ class User:
         self.username: str = username
 
     def exist(self) -> bool:
+        """Checks if user exist in database
+
+        Returns:
+            bool
+        """        
         query: str = f"""SELECT * FROM Users WHERE username='{self.username}'"""
         self.db.execute(query)
         is_exist = self.db.cursor.fetchone()
@@ -29,6 +34,11 @@ class User:
         return False
 
     def create(self, password: str) -> None:
+        """Creates user in database, 
+
+        Args:
+            password (str): user password
+        """        
         hashed_password: str = hashlib.sha256(password.encode()).hexdigest()
 
         query: str = f"""INSERT INTO Users (username, password) VALUES (?,?)"""
@@ -37,6 +47,14 @@ class User:
         self.db.commit()
 
     def check_password(self, password: str) -> bool:
+        """Checks if user password in database equal given password
+
+        Args:
+            password (str): given user password
+
+        Returns:
+            bool
+        """        
         hashed_password: str = hashlib.sha256(password.encode()).hexdigest()
         query: str = f"""SELECT password FROM Users WHERE username='{self.username}'"""
         self.db.execute(query)
@@ -47,21 +65,42 @@ class User:
         return False
 
 
-class Auth():
+class Token():
+    """Object to handle JWT token"""
     class TokenSerializer(BaseModel):
+        """Data serializer for JWT token"""
         access_token: str
 
-    def generate_token(username: str) -> Dict[str, str]:
+    def generate_token(username: str) -> str:
+        """Generate JWT token with given username
+        Args:
+            username (str): user's username
+
+        Returns:
+            str: JWT access token
+        """
         payload: dict = {
             "username": username,
             "expires": time.time() + 86400
         }
         print(payload)
-        token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+        token: str = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
         return token
 
     def decode_token(token: str) -> dict:
+        """Decodes JWT token or raises exceptions if some error occured
+
+        Args:
+            token (str): user JWT token
+
+        Raises:
+            HTTPException: Token expired
+            HTTPException: Invalid Credentials
+
+        Returns:
+            dict: token payload
+        """
         try:
             decoded_token: dict = jwt.decode(
                 token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
@@ -76,10 +115,28 @@ class Auth():
 
 
 class JWTBearer(HTTPBearer):
+    """Object to check user permission on visit route. 
+    On __call__ object checks if user's JWT token from Request correct and raises exceptions if it doesn't
+    
+    Returns:
+        str: username from correct JWT token"""
     def __init__(self, auto_error: bool = True):
         super().__init__(auto_error=auto_error)
 
-    async def __call__(self, request: Request):
+    async def __call__(self, request: Request) -> str | None:
+        """Checks if user authentificated, returns username if he does, overwise returns exceptions
+
+        Args:
+            request (Request)
+
+        Raises:
+            HTTPException: Invalid authentication scheme.
+            HTTPException: Invalid token or expired token.
+            HTTPException: Invalid authorization code.
+
+        Returns:
+            str | None: username
+        """
         credentials: HTTPAuthorizationCredentials = await super().__call__(request)
         if credentials:
             if not credentials.scheme == "Bearer":
@@ -90,18 +147,28 @@ class JWTBearer(HTTPBearer):
                 raise HTTPException(
                     status_code=403, detail="Invalid token or expired token.")
 
-            return payload
+            return payload.get('username')
         else:
             raise HTTPException(
                 status_code=403, detail="Invalid authorization code.")
 
     def verify_jwt(self, jwtoken: str) -> tuple[bool, dict | None]:
+        """Checks if JWT token correct 
+
+        Args:
+            jwtoken (str): User JWT token
+
+        Returns:
+            tuple[bool, dict | None]: (isTokenValid, payload)
+        """
         isTokenValid: bool = False
 
         try:
-            payload = Auth.decode_token(jwtoken)
+            payload = Token.decode_token(jwtoken)
         except:
             payload = None
         if payload:
             isTokenValid = True
         return isTokenValid, payload
+
+JWT_PERMISSION = Depends(JWTBearer())

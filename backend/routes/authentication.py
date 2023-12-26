@@ -1,23 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
-from tools.auth import User, Auth, JWTBearer
-from typing import Annotated
+from tools.auth import User, Token, JWT_PERMISSION
+from typing import Annotated, Dict
 
 ENDPOINT = "auth"
 
 ROUTER = APIRouter(prefix=f"/api/{ENDPOINT}", tags=[ENDPOINT])
 
-JWT_PERMISSION = Depends(JWTBearer)
-
-
 @ROUTER.get("/", status_code=200, dependencies=[JWT_PERMISSION])
-def main(auth_data:  Annotated[dict, JWT_PERMISSION]) -> dict:
-    print(auth_data)
+def main(username:  Annotated[str, JWT_PERMISSION]) -> dict:
+    print(username)
     return {"": "AUTH"}
 
 
 @ROUTER.post("/create", status_code=status.HTTP_201_CREATED)
 def create(data: User.UserLoginSerializer) -> dict:
-    """User creation in DB with given username and password.
+    """Route for user creation in DB with given username and password.
 
     Args:
         data (dict): {"username": "yourusername","password": "yourpassword"}
@@ -39,11 +36,11 @@ def create(data: User.UserLoginSerializer) -> dict:
     return {"status": "User successfully added"}
 
 
-@ROUTER.post(
-    "/login", status_code=status.HTTP_200_OK, response_model=Auth.TokenSerializer
-)
+@ROUTER.post("/login", 
+             status_code=status.HTTP_200_OK, 
+             response_model=Token.TokenSerializer)
 def login(data: User.UserLoginSerializer) -> dict:
-    """User login with given username and password. Endpoint returns JWT access token.
+    """Route for user login with given username and password. Endpoint returns JWT access token.
 
     Args:
         data (dict): {"username": "yourusername","password": "yourpassword"}
@@ -68,4 +65,4 @@ def login(data: User.UserLoginSerializer) -> dict:
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Wrong password",
         )
-    return {"access_token": Auth.generate_token(data.username)}
+    return {"access_token": Token.generate_token(data.username)}
