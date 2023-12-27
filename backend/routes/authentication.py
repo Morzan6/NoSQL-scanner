@@ -26,13 +26,15 @@ def create(data: User.UserLoginSerializer) -> dict:
         dict: {"status": "User successfully added"}
     """
     user: User = User(data.username)
-    if user.exist():
+    
+    if user.is_exist:
+        print(user.id)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User with this username already exists",
         )
     user.create(data.password)
-    print(data)
+    print(user)
     return {"status": "User successfully added"}
 
 

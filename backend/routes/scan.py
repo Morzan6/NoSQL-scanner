@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
+from tools.auth import User, Token, JWT_PERMISSION
 
 ENDPOINT = "scan"
 

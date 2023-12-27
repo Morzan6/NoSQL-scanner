@@ -5,7 +5,7 @@ from fastapi import HTTPException, status, Request, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import jwt
 import time
-from typing import Dict
+from typing import Dict, Any
 from config import JWT_SECRET, JWT_ALGORITHM
 
 class User:
@@ -16,22 +16,18 @@ class User:
         password: str = Field(min_length=8)
 
     def __init__(self, username: str):
-        self.db = Database()
+        self.db: Database = Database()
         self.username: str = username
-
-    def exist(self) -> bool:
-        """Checks if user exist in database
-
-        Returns:
-            bool
-        """        
+        self.id: int | None = None
+        self.is_exist: bool = False
+        
         query: str = f"""SELECT * FROM Users WHERE username='{self.username}'"""
         self.db.execute(query)
-        is_exist = self.db.cursor.fetchone()
-        if is_exist:
-            return True
-
-        return False
+        user: tuple = self.db.cursor.fetchone()
+        
+        if user:
+            self.is_exist = True
+            self.id, self.username, _ = user
 
     def create(self, password: str) -> None:
         """Creates user in database, 
@@ -43,8 +39,9 @@ class User:
 
         query: str = f"""INSERT INTO Users (username, password) VALUES (?,?)"""
         values = (self.username, hashed_password)
-        self.db.execute(query, values)
+        self.id = self.db.execute(query, values)
         self.db.commit()
+        self.is_exist = True
 
     def check_password(self, password: str) -> bool:
         """Checks if user password in database equal given password
@@ -63,6 +60,9 @@ class User:
         if db_password == (hashed_password,):
             return True
         return False
+    
+    def __repr__(self) -> str | None:
+        return repr([self.id, self.username])
 
 
 class Token():
