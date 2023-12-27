@@ -57,7 +57,7 @@ def login(data: User.UserLoginSerializer) -> dict:
 
     user: User = User(data.username)
 
-    if not user.exist():
+    if not user.is_exist:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User does not exist",
