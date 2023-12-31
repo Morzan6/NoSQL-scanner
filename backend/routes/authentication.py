@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from tools.auth import User, Token, JWT_PERMISSION
 from typing import Annotated, Dict
+from serializers import UserLoginSerializer, TokenSerializer
 
 ENDPOINT = "auth"
 
@@ -13,7 +14,7 @@ def main(username:  Annotated[str, JWT_PERMISSION]) -> dict:
 
 
 @ROUTER.post("/create", status_code=status.HTTP_201_CREATED)
-def create(data: User.UserLoginSerializer) -> dict:
+def create(data: UserLoginSerializer) -> Dict[str, str]:
     """Route for user creation in DB with given username and password.
 
     Args:
@@ -40,8 +41,8 @@ def create(data: User.UserLoginSerializer) -> dict:
 
 @ROUTER.post("/login", 
              status_code=status.HTTP_200_OK, 
-             response_model=Token.TokenSerializer)
-def login(data: User.UserLoginSerializer) -> dict:
+             response_model=TokenSerializer)
+def login(data: UserLoginSerializer) -> Dict[str, str]:
     """Route for user login with given username and password. Endpoint returns JWT access token.
 
     Args:

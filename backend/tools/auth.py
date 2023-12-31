@@ -10,11 +10,7 @@ from config import JWT_SECRET, JWT_ALGORITHM
 
 class User:
     """Object to handle communication with user in database"""    
-    class UserLoginSerializer(BaseModel):
-        """Data serializer for user login"""
-        username: str = Field(pattern=r"[A-Za-z0-9_@!]+", max_length=100)
-        password: str = Field(min_length=8)
-
+    
     def __init__(self, username: str):
         self.db: Database = Database()
         self.username: str = username
@@ -67,9 +63,6 @@ class User:
 
 class Token():
     """Object to handle JWT token"""
-    class TokenSerializer(BaseModel):
-        """Data serializer for JWT token"""
-        access_token: str
 
     def generate_token(username: str) -> str:
         """Generate JWT token with given username
