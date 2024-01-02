@@ -11,7 +11,7 @@ class Database:
         self.cursor = self.connect.cursor()
         
         if not self.check_table('Users'):
-            self.create_table_users()
+            self.create_tables()
 
     def __del__(self):
         self.cursor.close()
@@ -33,16 +33,25 @@ class Database:
         self.execute(query)
         return self.cursor.fetchone()
     
-    def create_table_users(self) -> None:
+    def create_tables(self) -> None:
         """
-        Create table 
+        Create tables
         """
         query: str = """
                 CREATE TABLE IF NOT EXISTS Users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT NULL,
-                password TEXT NOT NULL
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT NULL,
+                    password TEXT NOT NULL
                 );
+                CREATE TABLE IF NOT EXISTS Scans (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user INTEGER, 
+                    type TEXT NULL,
+                    status TEXT NOT NULL,
+                    ip TEXT NOT NULL,
+                    datetime TEXT NOT NULL,
+                    FOREIGN KEY (user) REFERENCES Users (id)
+                ); 
                 """
         self.execute(query)
 

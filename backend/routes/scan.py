@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from tools.auth import User, Token, JWT_PERMISSION
 from typing import Dict, Annotated
-from serializers import ScanSerializer
+from serializers import ScanStartSerializer, ScanStatusSerializer
 
 ENDPOINT = "scan"
 
@@ -13,7 +13,7 @@ def main():
     return {"": "SCAN"}
 
 @ROUTER.post("/start", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
-def start(username:  Annotated[str, JWT_PERMISSION], data: ScanSerializer) -> Dict[str, int]:
+def start(username:  Annotated[str, JWT_PERMISSION], data: ScanStartSerializer) -> Dict[str, int]:
     print(username, data)
     scan_id = ""
     return {"scan_id": scan_id}
