@@ -10,7 +10,7 @@ class Database:
         self.connect = sqlite3.connect("database.db")
         self.cursor = self.connect.cursor()
         
-        if not self.check_table('Users'):
+        if not self.check_table('Users') or not self.check_table('Scans'):
             self.create_tables()
 
     def __del__(self):
@@ -37,12 +37,14 @@ class Database:
         """
         Create tables
         """
-        query: str = """
+        users: str = """
                 CREATE TABLE IF NOT EXISTS Users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT NULL,
                     password TEXT NOT NULL
-                );
+                ); 
+                """
+        scans: str = """
                 CREATE TABLE IF NOT EXISTS Scans (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     user INTEGER, 
@@ -51,9 +53,9 @@ class Database:
                     ip TEXT NOT NULL,
                     datetime TEXT NOT NULL,
                     FOREIGN KEY (user) REFERENCES Users (id)
-                ); 
-                """
-        self.execute(query)
+                );"""
+        self.execute(users)
+        self.execute(scans)
 
 
 

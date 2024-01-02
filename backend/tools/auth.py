@@ -164,4 +164,4 @@ class JWTBearer(HTTPBearer):
             isTokenValid = True
         return isTokenValid, payload
 
-JWT_PERMISSION = Depends(JWTBearer())
+JWT_PERMISSION: Any = Depends(JWTBearer())

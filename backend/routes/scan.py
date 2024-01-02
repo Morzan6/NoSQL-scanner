@@ -15,5 +15,5 @@ def main():
 @ROUTER.post("/start", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
 def start(username:  Annotated[str, JWT_PERMISSION], data: ScanStartSerializer) -> Dict[str, int]:
     print(username, data)
-    scan_id = ""
+    scan_id: int = 0
     return {"scan_id": scan_id}
