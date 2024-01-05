@@ -47,12 +47,14 @@ class Database:
         scans: str = """
                 CREATE TABLE IF NOT EXISTS Scans (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    user INTEGER, 
+                    user_id INTEGER, 
                     type TEXT NULL,
                     status TEXT NOT NULL,
                     ip TEXT NOT NULL,
+                    port INTEGER NOT NULL,
+                    vuln_data TEXT,
                     datetime TEXT NOT NULL,
-                    FOREIGN KEY (user) REFERENCES Users (id)
+                    FOREIGN KEY (user_id) REFERENCES Users (id)
                 );"""
         self.execute(users)
         self.execute(scans)
