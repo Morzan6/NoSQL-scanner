@@ -1,6 +1,7 @@
 import sqlite3
 from typing import Any
 
+
 class Database:
     """
     Database api class
@@ -9,8 +10,8 @@ class Database:
     def __init__(self):
         self.connect = sqlite3.connect("database.db")
         self.cursor = self.connect.cursor()
-        
-        if not self.check_table('Users') or not self.check_table('Scans'):
+
+        if not self.check_table("Users") or not self.check_table("Scans"):
             self.create_tables()
 
     def __del__(self):
@@ -19,11 +20,11 @@ class Database:
 
     def commit(self):
         self.connect.commit()
-    
+
     def close(self):
         self.connect.close()
         self.cursor.close()
-    
+
     def execute(self, query: str, *args) -> int | None:
         self.cursor.execute(query, *args)
         return self.cursor.lastrowid
@@ -32,7 +33,7 @@ class Database:
         query: str = f"""SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'"""
         self.execute(query)
         return self.cursor.fetchone()
-    
+
     def create_tables(self) -> None:
         """
         Create tables
@@ -58,7 +59,6 @@ class Database:
                 );"""
         self.execute(users)
         self.execute(scans)
-
 
 
 # db = Database()

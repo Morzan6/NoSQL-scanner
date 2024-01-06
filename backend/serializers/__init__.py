@@ -13,6 +13,3 @@ class TokenSerializer(BaseModel):
 class ScanStartSerializer(BaseModel):
     ip: str = Field(pattern=r'^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$')
     port: int = Field(max_length=8)
-    
-class ScanStatusSerializer(BaseModel):
-    scan_id: int = Field()

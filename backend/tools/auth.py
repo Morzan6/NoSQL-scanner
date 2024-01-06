@@ -5,32 +5,36 @@ from fastapi import HTTPException, status, Request, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import jwt
 import time
-from typing import Dict, Any
+from typing import Dict, Any, List
 from config import JWT_SECRET, JWT_ALGORITHM
 
+
 class User:
-    """Object to handle communication with user in database"""    
-    
+    """Object to handle communication with user in database"""
+
     def __init__(self, username: str):
         self.db: Database = Database()
         self.username: str = username
         self.id: int | None = None
         self.is_exist: bool = False
-        
-        query: str = f"""SELECT * FROM Users WHERE username='{self.username}'"""
+
+        query: str = (
+            f"""SELECT id, username FROM Users WHERE username='{self.username}'"""
+        )
         self.db.execute(query)
         user: tuple = self.db.cursor.fetchone()
-        
+
         if user:
             self.is_exist = True
-            self.id, self.username, _ = user
+            self.id, self.username = user
+            self.scans: List[int] = self.get_scans()
 
     def create(self, password: str) -> None:
-        """Creates user in database, 
+        """Creates user in database,
 
         Args:
             password (str): user password
-        """        
+        """
         hashed_password: str = hashlib.sha256(password.encode()).hexdigest()
 
         query: str = f"""INSERT INTO Users (username, password) VALUES (?,?)"""
@@ -47,7 +51,7 @@ class User:
 
         Returns:
             bool
-        """        
+        """
         hashed_password: str = hashlib.sha256(password.encode()).hexdigest()
         query: str = f"""SELECT password FROM Users WHERE username='{self.username}'"""
         self.db.execute(query)
@@ -56,12 +60,21 @@ class User:
         if db_password == (hashed_password,):
             return True
         return False
-    
+
+    def get_scans(self) -> List[int]:
+        """Get all users scans
+
+        Returns:
+            List[int]: list of user's scans ids
+        """
+        self.db.execute(f"""SELECT id FROM Scans WHERE user_id='{self.id}'""")
+        return [i for (i,) in self.db.cursor.fetchall()]
+
     def __repr__(self) -> str | None:
-        return repr([self.id, self.username])
+        return f"User({str([self.id, self.username])})"
 
 
-class Token():
+class Token:
     """Object to handle JWT token"""
 
     def generate_token(username: str) -> str:
@@ -72,10 +85,7 @@ class Token():
         Returns:
             str: JWT access token
         """
-        payload: dict = {
-            "username": username,
-            "expires": time.time() + 86400
-        }
+        payload: dict = {"username": username, "expires": time.time() + 86400}
         print(payload)
         token: str = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
@@ -96,23 +106,27 @@ class Token():
         """
         try:
             decoded_token: dict = jwt.decode(
-                token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+                token, JWT_SECRET, algorithms=[JWT_ALGORITHM]
+            )
             if decoded_token["expires"] >= time.time():
                 return decoded_token
             else:
                 raise HTTPException(
-                    status_code=status.HTTP_403_FORBIDDEN, detail="Token expired")
+                    status_code=status.HTTP_403_FORBIDDEN, detail="Token expired"
+                )
         except jwt.DecodeError:
             raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN, detail="Invalid Credentials")
+                status_code=status.HTTP_403_FORBIDDEN, detail="Invalid Credentials"
+            )
 
 
 class JWTBearer(HTTPBearer):
-    """Object to check user permission on visit route. 
+    """Object to check user permission on visit route.
     On __call__ object checks if user's JWT token from Request correct and raises exceptions if it doesn't
-    
+
     Returns:
         str: username from correct JWT token"""
+
     def __init__(self, auto_error: bool = True):
         super().__init__(auto_error=auto_error)
 
@@ -134,19 +148,18 @@ class JWTBearer(HTTPBearer):
         if credentials:
             if not credentials.scheme == "Bearer":
                 raise HTTPException(
-                    status_code=403, detail="Invalid authentication scheme.")
+                    status_code=403, detail="Invalid authentication scheme."
+                )
             isValid, payload = self.verify_jwt(credentials.credentials)
             if not isValid:
-                raise HTTPException(
-                    status_code=403, detail="Invalid or expired token.")
-
-            return payload.get('username')
+                raise HTTPException(status_code=403, detail="Invalid or expired token.")
+            username: str = payload.get("username")
+            return User(username)
         else:
-            raise HTTPException(
-                status_code=403, detail="Invalid authorization code.")
+            raise HTTPException(status_code=403, detail="Invalid authorization code.")
 
     def verify_jwt(self, jwtoken: str) -> tuple[bool, dict | None]:
-        """Checks if JWT token correct 
+        """Checks if JWT token correct
 
         Args:
             jwtoken (str): User JWT token
@@ -163,5 +176,6 @@ class JWTBearer(HTTPBearer):
         if payload:
             isTokenValid = True
         return isTokenValid, payload
+
 
 JWT_PERMISSION: Any = Depends(JWTBearer())
