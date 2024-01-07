@@ -22,7 +22,7 @@ def start(user: Annotated[User, JWT_PERMISSION], data: ScanStartSerializer) -> D
                                                 }
 
     Returns:
-        Dict[str, int]: scan id
+        Dict[str, int]: {"scan_id": scan_id}
     """    
     print(user, data)
     scan_id: int = 0
@@ -85,6 +85,7 @@ def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int]
     return {
         "id": scan.id,
         "type": scan.type,
+        "version": scan.version,
         "ip": scan.ip,
         "port": scan.port,
         "datetime": scan.datetime,

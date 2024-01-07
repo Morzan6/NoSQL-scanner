@@ -51,6 +51,7 @@ class Database:
                     user_id INTEGER, 
                     type TEXT NULL,
                     status TEXT NOT NULL,
+                    version TEXT NULL,
                     ip TEXT NOT NULL,
                     port INTEGER NOT NULL,
                     vuln_data TEXT,

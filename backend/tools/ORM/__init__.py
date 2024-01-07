@@ -76,19 +76,24 @@ class User:
 
 
 class Scan:
-    def __init__(self, scan_id: int) -> None:
+    """Object to handle communication with scan in database"""
+    def __init__(self, scan_id: int | None = None) -> None:
         self.db: Database = Database()
 
         self.id: int = scan_id
         self.type: str
+        self.version: str
         self.user_id: int
         self.ip: str
         self.port: int
         self.vuln_data: str
         self.datetime: str
-
+        
+        if not scan_id:
+            return
+        
         self.db.execute(
-            f"""SELECT type, user_id, status, ip, port, vuln_data, datetime FROM Scans WHERE id='{self.id}'"""
+            f"""SELECT type, user_id, status, version, ip, port, vuln_data, datetime FROM Scans WHERE id='{self.id}'"""
         )
 
         scan: tuple = self.db.cursor.fetchone()
@@ -101,6 +106,7 @@ class Scan:
             self.type,
             self.user_id,
             self.status,
+            self.version,
             self.ip,
             self.port,
             self.vuln_data,
@@ -108,4 +114,4 @@ class Scan:
         ) = scan
 
     def __repr__(self) -> str | None:
-        return f"Scan({str([self.id, self.type, self.user_id, self.status, self.ip, self.port, self.vuln_data, self.datetime])})"
+        return f"Scan({str([self.id, self.type, self.user_id, self.status, self.version, self.ip, self.port, self.vuln_data, self.datetime])})"
