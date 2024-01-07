@@ -7,72 +7,7 @@ import jwt
 import time
 from typing import Dict, Any, List
 from config import JWT_SECRET, JWT_ALGORITHM
-
-
-class User:
-    """Object to handle communication with user in database"""
-
-    def __init__(self, username: str):
-        self.db: Database = Database()
-        self.username: str = username
-        self.id: int | None = None
-        self.is_exist: bool = False
-
-        query: str = (
-            f"""SELECT id, username FROM Users WHERE username='{self.username}'"""
-        )
-        self.db.execute(query)
-        user: tuple = self.db.cursor.fetchone()
-
-        if user:
-            self.is_exist = True
-            self.id, self.username = user
-            self.scans: List[int] = self.get_scans()
-
-    def create(self, password: str) -> None:
-        """Creates user in database,
-
-        Args:
-            password (str): user password
-        """
-        hashed_password: str = hashlib.sha256(password.encode()).hexdigest()
-
-        query: str = f"""INSERT INTO Users (username, password) VALUES (?,?)"""
-        values = (self.username, hashed_password)
-        self.id = self.db.execute(query, values)
-        self.db.commit()
-        self.is_exist = True
-
-    def check_password(self, password: str) -> bool:
-        """Checks if user password in database equal given password
-
-        Args:
-            password (str): given user password
-
-        Returns:
-            bool
-        """
-        hashed_password: str = hashlib.sha256(password.encode()).hexdigest()
-        query: str = f"""SELECT password FROM Users WHERE username='{self.username}'"""
-        self.db.execute(query)
-        db_password = self.db.cursor.fetchone()
-        print(db_password, hashed_password)
-        if db_password == (hashed_password,):
-            return True
-        return False
-
-    def get_scans(self) -> List[int]:
-        """Get all users scans
-
-        Returns:
-            List[int]: list of user's scans ids
-        """
-        self.db.execute(f"""SELECT id FROM Scans WHERE user_id='{self.id}'""")
-        return [i for (i,) in self.db.cursor.fetchall()]
-
-    def __repr__(self) -> str | None:
-        return f"User({str([self.id, self.username])})"
-
+from tools.ORM import User
 
 class Token:
     """Object to handle JWT token"""

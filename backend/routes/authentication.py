@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
-from tools.auth import User, Token, JWT_PERMISSION
+from tools.auth import Token, JWT_PERMISSION
+from tools.ORM import User
 from typing import Annotated, Dict
 from serializers import UserLoginSerializer, TokenSerializer
 
