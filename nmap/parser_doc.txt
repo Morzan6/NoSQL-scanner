@@ -1,0 +1,29 @@
+The scan follow this schema:
+
+{
+    "port": int, # the port on which the db was found
+    "proto": "tcp" or "udp", # the access protocol
+    "state": string, # the nmap STATE parameter
+    "reason": string, # the nmap REASON parameter
+    "service": string, # the technical service name
+    "display_name": string, # the beautiful service name
+    "version": string, # the service version
+    "vulns": List { # all non-CVE vulnerabilities found 
+      "vulndb": string, # db name and url
+      "vulns": List {
+        "id": string, # vulnerability id in the database
+        "description": string # vulnerability description
+      }
+    }
+    "cves": List { # all CVEs found
+      "id": string, # CVE id, e.g. "CVE-2013-4650"
+      "description": string, # the CVE description
+      "impact_version": "V2" or "V3", # impact evaluation version
+      "versions": don't touch this,
+      "base_score_v2": float, # v2 base score, always present
+      "base_severity_v2": string, # v2 base severity, always present
+      "base_score_v3": float or "", # v3 base score, valid only if impact_version == V3 
+      "base_severity_v3": string, # v3 base severity, valid only if impact_version == V3
+      "rec": string # recomendation for the cve (only present in some cves, the default value is empty string)
+    }
+}
