@@ -41,7 +41,7 @@ def _process_cve(cve):
         "base_severity_v2": base_severity,
         "base_score_v3": base_score_v3,
         "base_severity_v3": base_severity_v3,
-        "rec": known_recs[id] if id in known_recs.keys() else "",
+        "rec": known_recs[id] if id in known_recs.keys() else "Рекомендуем обновить базу данных до версии, которая не подвержена этой уязвимости.",
     }
 
 
