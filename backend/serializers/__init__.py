@@ -11,5 +11,6 @@ class TokenSerializer(BaseModel):
         access_token: str
         
 class ScanStartSerializer(BaseModel):
+    name: str = Field(max_length=100, pattern=r'^[\p{Cyrillic}.(),:;A-Za-z0-9]+$')
     ip: str = Field(pattern=r'^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$')
     port: int = Field()

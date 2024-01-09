@@ -94,7 +94,7 @@ class Scan:
             return
         
         self.db.execute(
-            f"""SELECT type, user_id, status, version, ip, port, vuln_data, datetime 
+            f"""SELECT type, user_id, status, version, ip, port, vuln_data, datetime, name 
                 FROM Scans WHERE id='{self.id}'"""
         )
 
@@ -113,25 +113,27 @@ class Scan:
             self.port,
             self.vuln_data,
             self.datetime,
+            self.name
         ) = scan
         
-    def new(self, user_id: int, ip: str, port: int, type: str  = None, status: str = "STARTED", version: str = None, vuln_data: str = None):
+    def new(self, user_id: int, ip: str, port: int, name: str, type: str  = None, status: str = "STARTED", version: str = None, vuln_data: str = None):
         """Creates new scan in Database and returns self objec with given propperties
 
         Args:
             user_id (int): user's id 
             ip (str): ip
             port (int): port 
+            name (str): name of scan
             type (str, optional): service type: 'redis', 'mongodb' etc.
             status (str, optional): scan status. Defaults to "STARTED".
             version (str, optional): version of scanned service. Defaults to None.
             vuln_data (str, optional): parsed vulnerabillity data . Defaults to None.
         """        
         dt = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        values: tuple = (user_id, type, status, version, ip, port, dt, vuln_data)
+        values: tuple = (user_id, type, status, version, ip, port, dt, vuln_data, name)
         
-        query: str = f"""INSERT INTO Scans (user_id, type, status, version, ip, port, datetime, vuln_data) 
-                         VALUES (?, ?, ?, ?, ?, ?, ?, ?);"""
+        query: str = f"""INSERT INTO Scans (user_id, type, status, version, ip, port, datetime, vuln_data, name) 
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"""
                          
         self.db.execute(query, values)
         self.db.commit()
@@ -144,6 +146,7 @@ class Scan:
         self.port = port
         self.vuln_data = vuln_data
         self.datetime = dt
+        self.name = name
         
         return self
         
@@ -161,7 +164,8 @@ class Scan:
                         ip='{self.ip}', 
                         port='{self.port}', 
                         datetime='{self.datetime}', 
-                        vuln_data='{self.vuln_data}'
+                        vuln_data='{self.vuln_data}',
+                        name='{self.name}'
                         WHERE id='{self.id}';"""
         self.db.execute(query)
         self.db.commit()

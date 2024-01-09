@@ -68,6 +68,7 @@ def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int 
         Dict[str, str | int]: {
                                 "id": 1,
                                 "type": "redis",
+                                "name": "perfect scan",
                                 "ip": "123.54.12.43",
                                 "port": 12454,
                                 "datetime": "2022-06-16 16:37:23",
@@ -88,6 +89,7 @@ def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int 
     return {
         "id": scan.id,
         "type": scan.type,
+        "name": scan.name,
         "version": scan.version,
         "status": scan.status,
         "ip": scan.ip,
@@ -108,12 +110,14 @@ def scan(user: Annotated[User, JWT_PERMISSION]) -> List[Dict[str, int | str]]:
                                         {
                                             "id": 1,
                                             "status": "ok",
+                                            "name": "perfect scan",
                                             "type": "redis",
                                             "ip": "255.255.255.255"
                                         },
                                         {
                                             "id": 2,
                                             "status": "scanning",
+                                            "name": "perfect scan",
                                             "type": "mongodb",
                                             "ip": "145.243.12.45"
                                         }
@@ -123,7 +127,7 @@ def scan(user: Annotated[User, JWT_PERMISSION]) -> List[Dict[str, int | str]]:
     for scan_id in user.scans:
         scan = Scan(scan_id)
         response.append(
-            {"id": scan.id, "status": scan.status, "type": scan.datetime, "ip": scan.ip}
+            {"id": scan.id, "status": scan.status, "name": scan.name, "type": scan.datetime, "ip": scan.ip}
         )
 
     return response

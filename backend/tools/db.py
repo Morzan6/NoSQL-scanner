@@ -48,7 +48,8 @@ class Database:
         scans: str = """
                 CREATE TABLE IF NOT EXISTS Scans (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    user_id INTEGER, 
+                    user_id INTEGER,
+                    name TEXT NOT NULL,
                     type TEXT NULL,
                     status TEXT NOT NULL,
                     version TEXT NULL,
