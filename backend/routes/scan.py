@@ -54,7 +54,7 @@ def scan_status(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str
 
 
 @ROUTER.get("/get", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
-def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int]:
+def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int | None]:
     """Route to get scan data by it's id
 
     Args:
