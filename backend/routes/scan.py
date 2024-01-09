@@ -81,11 +81,15 @@ def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int]
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You can not access another user's scan",
         )
+        
+    scan.type = "redis"
+    scan.save()
 
     return {
         "id": scan.id,
         "type": scan.type,
         "version": scan.version,
+        "status": scan.status,
         "ip": scan.ip,
         "port": scan.port,
         "datetime": scan.datetime,
@@ -123,3 +127,19 @@ def scan(user: Annotated[User, JWT_PERMISSION]) -> List[Dict[str, int | str]]:
         )
 
     return response
+
+
+@ROUTER.get("/create", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
+def scan(user: Annotated[User, JWT_PERMISSION]):
+    print(user.scans)
+    scan = Scan().new(user.id, ip='124.143.43.24', port=345, type='redis')
+    print(scan)
+    return {
+        "id": scan.id,
+        "type": scan.type,
+        "version": scan.version,
+        "ip": scan.ip,
+        "port": scan.port,
+        "datetime": scan.datetime,
+        "vulnerability_data": scan.vuln_data,
+    }
