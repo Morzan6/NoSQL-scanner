@@ -127,7 +127,7 @@ def scan(user: Annotated[User, JWT_PERMISSION]) -> List[Dict[str, int | str]]:
     for scan_id in user.scans:
         scan = Scan(scan_id)
         response.append(
-            {"id": scan.id, "status": scan.status, "name": scan.name, "type": scan.datetime, "ip": scan.ip}
+            {"id": scan.id, "status": scan.status, "name": scan.name, "datetime": scan.datetime, "type": scan.type, "ip": scan.ip}
         )
 
     return response
