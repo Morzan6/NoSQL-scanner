@@ -74,9 +74,9 @@ class User:
         return f"User({str([self.id, self.username])})"
 
 
-
 class Scan:
     """Object to handle communication with scan in database"""
+
     def __init__(self, scan_id: int | None = None) -> None:
         self.db: Database = Database()
 
@@ -89,12 +89,14 @@ class Scan:
         self.port: int | None = None
         self.vuln_data: str | None = None
         self.datetime: str | None = None
-        
+        self.name: str | None = None
+        self.description: str | None = None
+
         if not scan_id:
             return
-        
+
         self.db.execute(
-            f"""SELECT type, user_id, status, version, ip, port, vuln_data, datetime, name 
+            f"""SELECT type, user_id, status, version, ip, port, vuln_data, datetime, name, description 
                 FROM Scans WHERE id='{self.id}'"""
         )
 
@@ -113,28 +115,40 @@ class Scan:
             self.port,
             self.vuln_data,
             self.datetime,
-            self.name
+            self.name,
+            self.description,
         ) = scan
-        
-    def new(self, user_id: int, ip: str, port: int, name: str, type: str  = None, status: str = "STARTED", version: str = None, vuln_data: str = None):
+
+    def new(
+        self,
+        user_id: int,
+        ip: str,
+        port: int,
+        name: str,
+        description: str = "My scan",
+        type: str = None,
+        status: str = "STARTED",
+        version: str = None,
+        vuln_data: str = None,
+    ):
         """Creates new scan in Database and returns self objec with given propperties
 
         Args:
-            user_id (int): user's id 
+            user_id (int): user's id
             ip (str): ip
-            port (int): port 
+            port (int): port
             name (str): name of scan
             type (str, optional): service type: 'redis', 'mongodb' etc.
             status (str, optional): scan status. Defaults to "STARTED".
             version (str, optional): version of scanned service. Defaults to None.
             vuln_data (str, optional): parsed vulnerabillity data . Defaults to None.
-        """        
-        dt = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        values: tuple = (user_id, type, status, version, ip, port, dt, vuln_data, name)
-        
-        query: str = f"""INSERT INTO Scans (user_id, type, status, version, ip, port, datetime, vuln_data, name) 
-                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"""
-                         
+        """
+        dt = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        values: tuple = (user_id, type, status, version, ip, port, dt, vuln_data, name, description)
+
+        query: str = f"""INSERT INTO Scans (user_id, type, status, version, ip, port, datetime, vuln_data, name, description) 
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"""
+
         self.db.execute(query, values)
         self.db.commit()
         self.id = self.db.cursor.lastrowid
@@ -147,15 +161,15 @@ class Scan:
         self.vuln_data = vuln_data
         self.datetime = dt
         self.name = name
-        
+        self.description = description
+
         return self
-        
-        
+
     def save(self) -> None:
         """Saves scan object in database
-        
+
         Returns:
-            int: last row id of updated scan in database. 
+            int: last row id of updated scan in database.
         """
         query: str = f"""UPDATE Scans
                         SET type='{self.type}', 
@@ -169,7 +183,7 @@ class Scan:
                         WHERE id='{self.id}';"""
         self.db.execute(query)
         self.db.commit()
-        
+
         return self.db.cursor.lastrowid
 
     def __repr__(self) -> str:

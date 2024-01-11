@@ -20,7 +20,7 @@ class Token:
         Returns:
             str: JWT access token
         """
-        payload: dict = {"username": username, "expires": time.time() + 86400}
+        payload: dict = {"username": username, "expires": int(time.time() + 86400)}
         print(payload)
         token: str = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 

@@ -50,6 +50,7 @@ class Database:
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     user_id INTEGER,
                     name TEXT NOT NULL,
+                    description TEXT,
                     type TEXT NULL,
                     status TEXT NOT NULL,
                     version TEXT NULL,

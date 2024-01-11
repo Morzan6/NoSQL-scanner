@@ -90,6 +90,7 @@ def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int 
         "id": scan.id,
         "type": scan.type,
         "name": scan.name,
+        "description": scan.description,
         "version": scan.version,
         "status": scan.status,
         "ip": scan.ip,
@@ -136,7 +137,7 @@ def scan(user: Annotated[User, JWT_PERMISSION]) -> List[Dict[str, int | str]]:
 @ROUTER.get("/create", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
 def scan(user: Annotated[User, JWT_PERMISSION]):
     print(user.scans)
-    scan = Scan().new(user.id, ip='124.143.43.24', port=345, type='redis')
+    scan:Scan = Scan().new(user.id, ip='124.143.43.24', port=345, type='redis')
     print(scan)
     return {
         "id": scan.id,
