@@ -4,7 +4,7 @@ DESCRIPTION = "Rest API Implementation to scan NoSQL Databases"
 VERSION = "0.1"
 ORIGINS = [
     "http://localhost",
-    "http://localhost:8080",
+    "http://localhost:8000",
 ]
 
 JWT_SECRET = os.environ.pop('JWT_SECRET', '1234')

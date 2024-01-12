@@ -22,7 +22,7 @@ services:
       - nosql-scanner
     volumes:
       - ./volumes/cert:/etc/cert
-      - ./volume/nginx-conf.d/etc/nginx/conf.d
+      - ./volumes/nginx-conf.d:/etc/nginx/conf.d
     restart: always
 
 
