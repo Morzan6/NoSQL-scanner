@@ -114,3 +114,4 @@ class JWTBearer(HTTPBearer):
 
 
 JWT_PERMISSION: Any = Depends(JWTBearer())
+
