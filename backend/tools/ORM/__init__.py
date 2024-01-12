@@ -1,12 +1,11 @@
-import hashlib
-from tools.db import Database
-from pydantic import BaseModel, Field
-from fastapi import HTTPException, status, Request, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import jwt
 import datetime
-from typing import Dict, Any, List
-from config import JWT_SECRET, JWT_ALGORITHM
+
+from argon2 import PasswordHasher
+from fastapi import HTTPException, status
+from typing import List
+
+from tools.db import Database
 
 
 class User:
@@ -35,7 +34,8 @@ class User:
         Args:
             password (str): user password
         """
-        hashed_password: str = hashlib.sha256(password.encode()).hexdigest()
+
+        hashed_password = PasswordHasher().hash(password)
 
         query: str = f"""INSERT INTO Users (username, password) VALUES (?,?)"""
         values = (self.username, hashed_password)
@@ -52,14 +52,10 @@ class User:
         Returns:
             bool
         """
-        hashed_password: str = hashlib.sha256(password.encode()).hexdigest()
         query: str = f"""SELECT password FROM Users WHERE username='{self.username}'"""
         self.db.execute(query)
         db_password = self.db.cursor.fetchone()
-        print(db_password, hashed_password)
-        if db_password == (hashed_password,):
-            return True
-        return False
+        return PasswordHasher().verify(db_password[0], password)
 
     def get_scans(self) -> List[int]:
         """Get all users scans
