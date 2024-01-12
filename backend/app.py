@@ -11,6 +11,7 @@ app = FastAPI(
     title="NoSQL-Scanner API",
     description=DESCRIPTION,
     version=VERSION,
+    debug=False
 )
 
 app.add_middleware(
