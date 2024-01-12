@@ -144,8 +144,8 @@ YP_TOKEN = (
 )
 if not YP_TOKEN:
     raise ValueError("Could not get yandex translator YP token")
-
-known_recs = json.load(open(os.path.realpath("./backend/nmap/cves.json"), "r"))
+#print(os.path.join(os.path.dirname(__file__),"cves.json"))
+known_recs = json.load(open(os.path.join(os.path.dirname(__file__),"cves.json"), "r"))
 
 # if __name__ == "__main__":
 #     res = parse_service(scan1)
