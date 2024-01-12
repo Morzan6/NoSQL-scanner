@@ -1,5 +1,7 @@
 import os
 import shutil
+from tools.ORM import Scan
+from nmap.parser import parse_service
 
 
 class Scanner:
@@ -7,7 +9,7 @@ class Scanner:
     Scanner class for nmap
     """
 
-    def __init__(self, ip: str, port: int, **creds):
+    def __init__(self, ip: str, port: int, scan: Scan, **creds):
 
         if shutil.which("nmap") is None:
             raise FileNotFoundError('Can not find nmap executable.')
@@ -18,6 +20,7 @@ class Scanner:
         self.ip = ip
         self.port = port
         self.creds = creds
+        self.scan = scan
         self.__create_command()
 
     def __create_command(self):
@@ -30,4 +33,6 @@ class Scanner:
 
     def run(self):
         self.output = os.popen(self.cmd).read()
+        print(self.output)
+        print(parse_service(self.output))
         return self.output
