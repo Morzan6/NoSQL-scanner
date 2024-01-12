@@ -24,6 +24,6 @@ The scan follow this schema:
       "base_severity_v2": string, # v2 base severity, always present
       "base_score_v3": float or "", # v3 base score, valid only if impact_version == V3 
       "base_severity_v3": string, # v3 base severity, valid only if impact_version == V3
-      "rec": string # recomendation for the cve (only present in some cves, the default value is the recommendation to bump db version)
+      "rec": string # recomendation for the cve (only present in some cves, the default value is empty string)
     }
 }

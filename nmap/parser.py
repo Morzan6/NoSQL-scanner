@@ -21,7 +21,7 @@ def _get_iam() -> str:
     return r["iamToken"]
 
 
-def _translate(text: str) -> str:
+def translate(text: str) -> str:
     folder_id = "b1g4ftrere1kbhdsohmg"
     target = "ru"
     body = {
@@ -62,18 +62,16 @@ def _process_cve(cve: dict) -> dict:
     base_severity = r["impact"]["baseMetricV2"]["severity"]
     return {
         "id": id,
-        "description": _translate(cve["description"])
+        "description": translate(cve["description"])
         if cve["description"]
-        else _translate(r["cve"]["description"]["description_data"][0]["value"]),
+        else translate(r["cve"]["description"]["description_data"][0]["value"]),
         "versions": r["configurations"]["nodes"],
         "impact_version": version,
         "base_score_v2": base_score,
         "base_severity_v2": base_severity,
         "base_score_v3": base_score_v3,
         "base_severity_v3": base_severity_v3,
-        "rec": _translate(known_recs[id])
-        if id in known_recs.keys()
-        else f"Рекомендуем п�днять версию базы данных до версии, которая не подвержена {id}.",
+        "rec": known_recs[id] if id in known_recs.keys() else "",
     }
 
 
@@ -140,10 +138,13 @@ def parse_service(s: str) -> dict:
 
 
 TOKEN = ""
-YP_TOKEN = os.getenv("YP_TOKEN")
+YP_TOKEN = (
+    os.getenv("YP_TOKEN")
+    or "y0_AgAAAAAmBdaJAATuwQAAAAD3eEAr6yvk4eLsRJ2SN3ddbl_HbQjpLRs"
+)
 if not YP_TOKEN:
     raise ValueError("Could not get yandex translator YP token")
-known_recs = json.load(open("mongocves.json", "r"))
+known_recs = json.load(open("cves.json", "r"))
 
 if __name__ == "__main__":
     res = parse_service(scan1)
