@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python:3.11-slim-bookworm
 WORKDIR /NoSQL-Scanner
 
 RUN apt update && apt install -y nmap git && \
