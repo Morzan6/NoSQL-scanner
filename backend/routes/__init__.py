@@ -1,2 +1,2 @@
-from routes.authentication import ROUTER as AUTHENTICATION
-from routes.scan import ROUTER as SCAN
+from .authentication import ROUTER as AUTHENTICATION
+from .scan import ROUTER as SCAN
