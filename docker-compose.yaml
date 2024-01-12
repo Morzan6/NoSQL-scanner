@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: backend
+    container_name: app
+    networks:
+      - nosql-scanner
+    restart: always
+
+  nginx:
+    image: nginx:1.25
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+    networks:
+      - nosql-scanner
+    volumes:
+      - ./volumes/cert:/etc/cert
+      - ./volume/nginx-conf.d/etc/nginx/conf.d
+    restart: always
+
+
+volumes:
+  cert:
+  nginx-conf.d:
+
+networks:
+  nosql-scanner:
+    driver: bridge
