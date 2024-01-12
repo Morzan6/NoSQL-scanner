@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile
       context: backend
     container_name: app
+    env_file: .env
     networks:
       - nosql-scanner
     restart: always
