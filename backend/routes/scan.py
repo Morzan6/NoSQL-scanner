@@ -6,6 +6,7 @@ from typing import Dict, Annotated, Any, List
 from serializers import ScanStartSerializer
 from nmap.scanner import Scanner
 import threading
+import json 
 
 ENDPOINT = "scan"
 
@@ -71,7 +72,7 @@ def scan_status(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str
 
 
 @ROUTER.get("/get", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
-def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int | None]:
+def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int | None | dict ]:
     """Route to get scan data by it's id
 
     Args:
@@ -113,7 +114,7 @@ def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int 
         "ip": scan.ip,
         "port": scan.port,
         "datetime": scan.datetime,
-        "vulnerability_data": scan.vuln_data,
+        "vulnerability_data": json.loads(scan.vuln_data)
     }
 
 
@@ -158,17 +159,17 @@ def scan(user: Annotated[User, JWT_PERMISSION]) -> List[Dict[str, int | str]]:
     return response
 
 
-@ROUTER.get("/create", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
-def scan(user: Annotated[User, JWT_PERMISSION]):
-    print(user.scans)
-    scan: Scan = Scan().new(user.id, ip="124.143.43.24", port=345, type="redis")
-    print(scan)
-    return {
-        "id": scan.id,
-        "type": scan.type,
-        "version": scan.version,
-        "ip": scan.ip,
-        "port": scan.port,
-        "datetime": scan.datetime,
-        "vulnerability_data": scan.vuln_data,
-    }
+# @ROUTER.get("/create", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
+# def scan(user: Annotated[User, JWT_PERMISSION]):
+#     print(user.scans)
+#     scan: Scan = Scan().new(user.id, ip="124.143.43.24", port=345, type="redis")
+#     print(scan)
+#     return {
+#         "id": scan.id,
+#         "type": scan.type,
+#         "version": scan.version,
+#         "ip": scan.ip,
+#         "port": scan.port,
+#         "datetime": scan.datetime,
+#         "vulnerability_data": scan.vuln_data,
+#     }
