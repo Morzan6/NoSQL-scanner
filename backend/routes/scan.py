@@ -7,6 +7,7 @@ from serializers import ScanStartSerializer
 from nmap.scanner import Scanner
 import threading
 import json
+from fastapi.responses import FileResponse
 
 ENDPOINT = "scan"
 
@@ -175,3 +176,17 @@ def scan(user: Annotated[User, JWT_PERMISSION]) -> List[Dict[str, int | str]]:
 #         "datetime": scan.datetime,
 #         "vulnerability_data": scan.vuln_data,
 #     }
+
+@ROUTER.get("/report", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
+def scan(user: Annotated[User, JWT_PERMISSION], id: int):
+    scan = Scan(id)
+    if scan.user_id != user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You can not access another user's scan",
+        )
+    
+    
+    
+    print("AAAAAAAAAAAAAAAAAAAa")
+    return FileResponse(path='/home/morzan/repos/NoSQL-scanner/backend/static/55.pdf', media_type='application/pdf')
