@@ -32,6 +32,11 @@ class Scanner:
         self.cmd = ' '.join(['nmap', service_version_info, script, port, self.ip])
 
     def run(self) -> str | None:
+        """Run scanning process
+
+        Returns:
+            str | None: output of nmap command
+        """
         self.scan.status: str = "SCANNING"
         self.scan.save()
         

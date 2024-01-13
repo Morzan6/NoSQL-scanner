@@ -6,7 +6,7 @@ from typing import Dict, Annotated, Any, List
 from serializers import ScanStartSerializer
 from nmap.scanner import Scanner
 import threading
-import json 
+import json
 
 ENDPOINT = "scan"
 
@@ -41,7 +41,7 @@ def start(
     scanner = Scanner(
         data.ip, data.port, scan, script="vulscan/vulscan"
     )  # Scanner object
-    t = threading.Thread(target=scanner.run) # Start scanning
+    t = threading.Thread(target=scanner.run)  # Start scanning
     t.start()
 
     return {"scan_id": scan.id}
@@ -72,7 +72,9 @@ def scan_status(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str
 
 
 @ROUTER.get("/get", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
-def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int | None | dict ]:
+def scan(
+    user: Annotated[User, JWT_PERMISSION], id: int
+) -> Dict[str, str | int | None | dict]:
     """Route to get scan data by it's id
 
     Args:
@@ -114,7 +116,7 @@ def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int 
         "ip": scan.ip,
         "port": scan.port,
         "datetime": scan.datetime,
-        "vulnerability_data": json.loads(scan.vuln_data)
+        "vulnerability_data": json.loads(scan.vuln_data),
     }
 
 

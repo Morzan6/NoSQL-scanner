@@ -8,12 +8,6 @@ ENDPOINT = "auth"
 
 ROUTER = APIRouter(prefix=f"/api/{ENDPOINT}", tags=[ENDPOINT])
 
-@ROUTER.get("/", status_code=200, dependencies=[JWT_PERMISSION])
-def main(username:  Annotated[str, JWT_PERMISSION]) -> dict:
-    print(username)
-    return {"": "AUTH"}
-
-
 @ROUTER.post("/create", status_code=status.HTTP_201_CREATED)
 def create(data: UserLoginSerializer) -> Dict[str, str]:
     """Route for user creation in DB with given username and password.
