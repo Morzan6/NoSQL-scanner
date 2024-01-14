@@ -8,7 +8,7 @@ class Database:
     """
 
     def __init__(self):
-        self.connect = sqlite3.connect("db/database.db", check_same_thread=False)
+        self.connect = sqlite3.connect("database.db", check_same_thread=False)
         self.cursor = self.connect.cursor()
 
         if not self.check_table("Users") or not self.check_table("Scans"):
