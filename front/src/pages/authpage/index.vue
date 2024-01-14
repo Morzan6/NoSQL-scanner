@@ -1,47 +1,54 @@
 <script>
 import { defineComponent } from "vue";
-import requestSender from "components/reqeust-sender";
-import {useQuasar} from "quasar";
-
+import requestSender from "components/request-sender";
+import { useQuasar } from "quasar";
 
 export default defineComponent({
-  name: 'AuthPage',
+  name: "AuthPage",
   setup() {
     const $q = useQuasar();
 
     return {
-      showNotify (text) {
+      showNotify(text) {
         $q.notify({
           message: text,
-          type: 'negative'
-        })
-      }
-    }
+          type: "negative",
+        });
+      },
+    };
   },
   data() {
     return {
-      name: '',
-      password: ''
+      name: "",
+      password: "",
     };
   },
   methods: {
     onSubmitLogin() {
-      const resp = requestSender('post', 'http://127.0.0.1:8000/api/auth/login/', {
-        "username": this.name,
-        "password": this.password
-      })
-      resp.then((res) => (localStorage.access_token = res.data.access_token)).catch((err) => (this.showNotify(err.response.data.detail)));
-      this.$router.push('scan');
+      const resp = requestSender(
+        "post",
+        "http://127.0.0.1:8000/api/auth/login/",
+        {
+          username: this.name,
+          password: this.password,
+        }
+      );
+      resp
+        .then((res) => (localStorage.access_token = res.data.access_token))
+        .catch((err) => this.showNotify(err.response.data.detail));
+      this.$router.push("scan");
     },
     onSubmitReg() {
-      const resp = requestSender('post', 'http://127.0.0.1:8000/api/auth/create/', {
-        "username": this.name,
-        "password": this.password
-      })
-      resp.then((res) => (this.onSubmitLogin())).catch((err) => (this.showNotify(err.response.data.detail)));
+      const resp = requestSender("post", process.env.API + "/auth/create/", {
+        username: this.name,
+        password: this.password,
+      });
+      resp
+        .then((res) => this.onSubmitLogin())
+        .catch((err) => this.showNotify(err.response.data.detail));
     },
   },
-})
+});
 </script>
 
 <template>
@@ -49,20 +56,33 @@ export default defineComponent({
     <q-list class="auth-list">
       <q-item class="header-text text-align-center">
         Войти или Зарегистрироваться
-        <img src="../../assets/strip.svg" style="width:569px; align-self: center;"/>
+        <img
+          src="../../assets/strip.svg"
+          style="width: 569px; align-self: center"
+        />
       </q-item>
       <q-item>
-        <input class="input default-text" placeholder="Имя" v-model="name"/>
+        <input class="input default-text" placeholder="Имя" v-model="name" />
       </q-item>
       <q-item>
-        <input class="input default-text" type="password" name="password" v-model="password" placeholder="Пароль"/>
+        <input
+          class="input default-text"
+          type="password"
+          name="password"
+          v-model="password"
+          placeholder="Пароль"
+        />
       </q-item>
       <div class="row">
         <q-item class="col-6">
-          <button class="default-text sub-button" @click="onSubmitLogin">Войти</button>
+          <button class="default-text sub-button" @click="onSubmitLogin">
+            Войти
+          </button>
         </q-item>
         <q-item class="col-6">
-          <button class="default-text sub-button" @click="onSubmitReg">Зарегистрироваться</button>
+          <button class="default-text sub-button" @click="onSubmitReg">
+            Зарегистрироваться
+          </button>
         </q-item>
       </div>
     </q-list>

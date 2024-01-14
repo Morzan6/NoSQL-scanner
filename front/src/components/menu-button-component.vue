@@ -2,27 +2,34 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'MenuButton',
+  name: "MenuButton",
   props: {
     href: {
       type: String,
-      default: ''
+      default: "",
     },
     text: {
       type: String,
-      default: 'New menu btn'
-    }
-  },
-  computed: {
-    onPage(){
-      return window.location.pathname === this.$router.resolve(this.href).path ? 'on-cur-page' : 'on-dif-page';
+      default: "New menu btn",
     },
   },
-})
+  computed: {
+    onPage() {
+      return window.location.pathname === this.$router.resolve(this.href).path
+        ? "on-cur-page"
+        : "on-dif-page";
+    },
+  },
+});
 </script>
 
 <template>
-    <a class="default-text" :class="onPage" v-on:click="$router.replace(this.href)">{{ text }}</a>
+  <a
+    class="default-text"
+    :class="onPage"
+    v-on:click="$router.replace(this.href)"
+    >{{ text }}</a
+  >
 </template>
 
 <style lang="sass" scoped>
@@ -53,5 +60,4 @@ $onPage: v-bind(onPage)
     height: 1px
     background: #2D2D2D
     width: 100%
-
 </style>

@@ -2,19 +2,10 @@
   <q-layout view="lHh Lpr lFf">
     <q-toolbar class="flex toolbar justify-around">
       <div class="flex flex-row-gap">
-        <menu-button
-          :href="'scan'"
-          :text="'Мои сканы'"
-        />
-        <menu-button
-          :href="'desk'"
-          :text="'Доска'"
-        />
+        <menu-button :href="'scan'" :text="'Мои сканы'" />
+        <menu-button :href="'desk'" :text="'Доска'" />
       </div>
-      <menu-button
-        :href="'auth'"
-        :text="'Вход'"
-      />
+      <menu-button :href="'auth'" :text="'Вход'" />
     </q-toolbar>
     <q-page-container>
       <router-view />
@@ -23,17 +14,17 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 import MenuButton from "components/menu-button-component.vue";
 
 export default defineComponent({
-  name: 'MainLayout',
-  components: {MenuButton},
-  component: ['MenuButton'],
-})
+  name: "MainLayout",
+  components: { MenuButton },
+  component: ["MenuButton"],
+});
 </script>
 
-<style lang="sass" scoped >
+<style lang="sass" scoped>
 .toolbar
   position: absolute
   right: 0
@@ -46,5 +37,4 @@ export default defineComponent({
 
 .flex-row-gap
   gap: 58px
-
 </style>
