@@ -84,7 +84,7 @@ export default defineComponent({
 .auth-list
   display: flex
   flex-direction: column
-  width: 829px
+  width: 828px
   height: 622px
   background: white
   box-shadow: rgba(0, 0, 0, .05) 0 27px 104.6px

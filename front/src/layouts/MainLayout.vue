@@ -10,11 +10,11 @@
           :href="'desk'"
           :text="'Доска'"
         />
-        <menu-button
+      </div>
+      <menu-button
         :href="'auth'"
         :text="'Вход'"
-        />
-      </div>
+      />
     </q-toolbar>
     <q-page-container>
       <router-view />
