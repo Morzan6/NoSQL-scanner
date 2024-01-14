@@ -7,6 +7,8 @@ services:
       context: backend
     container_name: app
     env_file: .env
+    volumes:
+      - ./volumes/db:/NoSQL-Scanner/db
     networks:
       - nosql-scanner
     restart: always
@@ -28,6 +30,7 @@ services:
 
 
 volumes:
+  db:
   cert:
   nginx-conf.d:
 
