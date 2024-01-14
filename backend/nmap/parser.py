@@ -3,7 +3,6 @@ from typing import List
 import requests
 import re
 import os
-from scans import scan1, scan2, scan3
 from concurrent.futures import ThreadPoolExecutor
 
 
@@ -144,8 +143,9 @@ YP_TOKEN = (
 )
 if not YP_TOKEN:
     raise ValueError("Could not get yandex translator YP token")
-known_recs = json.load(open("cves.json", "r"))
 
-if __name__ == "__main__":
-    res = parse_service(scan1)
-    print(json.dumps(res))
+known_recs = json.load(open(os.path.join(os.path.dirname(__file__), "cves.json"), "r"))
+
+# if __name__ == "__main__":
+#     res = parse_service(scan1)
+#     print(json.dumps(res))

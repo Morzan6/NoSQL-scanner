@@ -4,6 +4,10 @@ from tools.auth import Token, JWT_PERMISSION
 from tools.ORM import Scan
 from typing import Dict, Annotated, Any, List
 from serializers import ScanStartSerializer
+from nmap.scanner import Scanner
+import threading
+import json
+from fastapi.responses import FileResponse
 
 ENDPOINT = "scan"
 
@@ -11,22 +15,37 @@ ROUTER = APIRouter(prefix=f"/api/{ENDPOINT}", tags=[ENDPOINT])
 
 
 @ROUTER.post("/start", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
-def start(user: Annotated[User, JWT_PERMISSION], data: ScanStartSerializer) -> Dict[str, int]:
+def start(
+    user: Annotated[User, JWT_PERMISSION], data: ScanStartSerializer
+) -> Dict[str, int]:
     """Route to start scan by ip and port
 
     Args:
         user (Annotated[User, JWT_PERMISSION]): User access token in headers
         data (ScanStartSerializer): POST data {
                                                 "ip": "123.23.123.24",
-                                                "port": 1234  
+                                                "port": 1234
                                                 }
 
     Returns:
         Dict[str, int]: {"scan_id": scan_id}
-    """    
+    """
     print(user, data)
-    scan_id: int = 0
-    return {"scan_id": scan_id}
+    scan: Scan = Scan().new(
+        user.id,
+        ip=data.ip,
+        port=data.port,
+        name=data.name,
+        description=data.description if data.description != None else "",
+    )  # Scan in Database
+
+    scanner = Scanner(
+        data.ip, data.port, scan, script="vulscan/vulscan"
+    )  # Scanner object
+    t = threading.Thread(target=scanner.run)  # Start scanning
+    t.start()
+
+    return {"scan_id": scan.id}
 
 
 @ROUTER.get("/status", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
@@ -42,7 +61,7 @@ def scan_status(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str
 
     Returns:
         Dict[str, str]: {"status": "scanning"}
-    """    
+    """
     scan: Scan = Scan(id)
     if scan.user_id != user.id:
         raise HTTPException(
@@ -54,7 +73,9 @@ def scan_status(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str
 
 
 @ROUTER.get("/get", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
-def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int | None]:
+def scan(
+    user: Annotated[User, JWT_PERMISSION], id: int
+) -> Dict[str, str | int | None | dict]:
     """Route to get scan data by it's id
 
     Args:
@@ -74,7 +95,7 @@ def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int 
                                 "datetime": "2022-06-16 16:37:23",
                                 "vulnerability_data": {}
                             }
-    """    
+    """
     print(user.scans)
     scan = Scan(id)
     if scan.user_id != user.id:
@@ -82,7 +103,7 @@ def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int 
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You can not access another user's scan",
         )
-        
+
     scan.type = "redis"
     scan.save()
 
@@ -96,7 +117,7 @@ def scan(user: Annotated[User, JWT_PERMISSION], id: int) -> Dict[str, str | int 
         "ip": scan.ip,
         "port": scan.port,
         "datetime": scan.datetime,
-        "vulnerability_data": scan.vuln_data,
+        "vulnerability_data": json.loads(scan.vuln_data),
     }
 
 
@@ -123,28 +144,49 @@ def scan(user: Annotated[User, JWT_PERMISSION]) -> List[Dict[str, int | str]]:
                                             "ip": "145.243.12.45"
                                         }
                                     ]
-    """    
+    """
     response = []
     for scan_id in user.scans:
         scan = Scan(scan_id)
         response.append(
-            {"id": scan.id, "status": scan.status, "name": scan.name, "datetime": scan.datetime, "type": scan.type, "ip": scan.ip}
+            {
+                "id": scan.id,
+                "status": scan.status,
+                "name": scan.name,
+                "datetime": scan.datetime,
+                "type": scan.type,
+                "ip": scan.ip,
+            }
         )
 
     return response
 
 
-@ROUTER.get("/create", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
-def scan(user: Annotated[User, JWT_PERMISSION]):
-    print(user.scans)
-    scan:Scan = Scan().new(user.id, ip='124.143.43.24', port=345, type='redis')
-    print(scan)
-    return {
-        "id": scan.id,
-        "type": scan.type,
-        "version": scan.version,
-        "ip": scan.ip,
-        "port": scan.port,
-        "datetime": scan.datetime,
-        "vulnerability_data": scan.vuln_data,
-    }
+# @ROUTER.get("/create", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
+# def scan(user: Annotated[User, JWT_PERMISSION]):
+#     print(user.scans)
+#     scan: Scan = Scan().new(user.id, ip="124.143.43.24", port=345, type="redis")
+#     print(scan)
+#     return {
+#         "id": scan.id,
+#         "type": scan.type,
+#         "version": scan.version,
+#         "ip": scan.ip,
+#         "port": scan.port,
+#         "datetime": scan.datetime,
+#         "vulnerability_data": scan.vuln_data,
+#     }
+
+@ROUTER.get("/report", status_code=status.HTTP_200_OK, dependencies=[JWT_PERMISSION])
+def scan(user: Annotated[User, JWT_PERMISSION], id: int):
+    scan = Scan(id)
+    if scan.user_id != user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You can not access another user's scan",
+        )
+    
+    
+    
+    print("AAAAAAAAAAAAAAAAAAAa")
+    return FileResponse(path='/home/morzan/repos/NoSQL-scanner/backend/static/55.pdf', media_type='application/pdf')
