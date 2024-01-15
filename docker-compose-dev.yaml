@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: backend
+    container_name: backend
+    env_file: .env
+    volumes:
+      - ./volumes-dev/db:/NoSQL-Scanner/db
+    networks:
+      - nosql-scanner
+    restart: always
+
+  frontend:
+    build: 
+      dockerfile: Dockerfile
+      context: front
+    container_name: frontend
+    depends_on:
+      - backend
+    networks:
+      - nosql-scanner
+    restart: always
+
+  nginx:
+    image: nginx:1.25
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - nosql-scanner
+    volumes:
+      - ./volumes-dev/nginx-conf.d:/etc/nginx/conf.d
+    restart: always
+
+
+volumes:
+  db:
+  nginx-conf.d:
+
+networks:
+  nosql-scanner:
+    driver: bridge

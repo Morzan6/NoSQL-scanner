@@ -6,6 +6,7 @@
   "author": "druZhba",
   "private": true,
   "scripts": {
+    "prod": "quasar serve dist/spa",
     "lint": "eslint --ext .js,.vue ./",
     "format": "prettier --write \"**/*.{js,vue,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
