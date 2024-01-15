@@ -4,7 +4,6 @@ import requestSender from "components/request-sender";
 import { useQuasar } from "quasar";
 
 export default defineComponent({
-  name: "AuthPage",
   setup() {
     const $q = useQuasar();
 
@@ -27,7 +26,7 @@ export default defineComponent({
     onSubmitLogin() {
       const resp = requestSender(
         "post",
-        "http://127.0.0.1:8000/api/auth/login/",
+        process.env.API+"/auth/login/",
         {
           username: this.name,
           password: this.password,

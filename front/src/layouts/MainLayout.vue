@@ -3,9 +3,12 @@
     <q-toolbar class="flex toolbar justify-around">
       <div class="flex flex-row-gap">
         <menu-button :href="'scan'" :text="'Мои сканы'" />
-        <menu-button :href="'desk'" :text="'Доска'" />
+        <menu-button :href="'dashboard'" :text="'Доска'" />
       </div>
-      <menu-button :href="'auth'" :text="'Вход'" />
+      <div v-if="!checkIfLogin">
+        <menu-button :href="'auth'" :text="'Вход'" />
+      </div>
+      <div v-else> <menu-button :href="'logout'" :text="'User'" /></div>
     </q-toolbar>
     <q-page-container>
       <router-view />
@@ -21,6 +24,15 @@ export default defineComponent({
   name: "MainLayout",
   components: { MenuButton },
   component: ["MenuButton"],
+  computed: {
+    checkIfLogin() {
+      if (localStorage.access_token) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
 });
 </script>
 
