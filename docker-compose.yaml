@@ -1,14 +1,26 @@
 version: "3"
 
 services:
-  app:
+
+  backend:
     build:
       dockerfile: Dockerfile
       context: backend
-    container_name: app
+    container_name: backend
     env_file: .env
     volumes:
       - ./volumes/db:/NoSQL-Scanner/db
+    networks:
+      - nosql-scanner
+    restart: always
+
+  frontend:
+    build: 
+      dockerfile: Dockerfile
+      context: front
+    container_name: frontend
+    depends_on:
+      - backend
     networks:
       - nosql-scanner
     restart: always
@@ -20,7 +32,8 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
-      - app
+      - backend
+      - frontend
     networks:
       - nosql-scanner
     volumes:
