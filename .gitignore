@@ -199,5 +199,5 @@ src-pwa
 src-ssr
 *.npmrc
 
-volumes/nginx-conf.d
-volumes/cert
+volumes
+volumes-dev/db/database.db
