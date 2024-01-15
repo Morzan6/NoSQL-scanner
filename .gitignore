@@ -198,6 +198,11 @@ quasar.config.js.*
 src-pwa
 src-ssr
 *.npmrc
+.npmrc
+.editorconfig
+.eslintignore
+.eslintrc.*
+.index.vue.swp
 
 volumes
 volumes-dev/db/database.db

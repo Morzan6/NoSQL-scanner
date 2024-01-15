@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-toolbar class="flex toolbar justify-around">
       <div class="flex flex-row-gap">
-        <menu-button :href="'scan'" :text="'Мои сканы'" />
+        <menu-button :href="'scans'" :text="'Мои сканы'" />
         <menu-button :href="'dashboard'" :text="'Доска'" />
       </div>
       <div v-if="!checkIfLogin">
