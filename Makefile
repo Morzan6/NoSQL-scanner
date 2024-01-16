@@ -2,6 +2,23 @@ DOCKER_COMPOSE = docker compose
 COMPOSE_FILE = "docker-compose-dev.yaml"
 DOCKER = docker
 
+.PHONY: help
+
+help: 
+	@echo "Usage: make [target]"
+	@echo "Targets:"
+	@echo "  ps    - list all containers"
+	@echo "  build - build all containers"
+	@echo "  up    - start all containers"
+	@echo "  down  - stop all containers"
+	@echo 
+	@echo "  restart-all              - restart all containers"
+	@echo "  restart <service>        - restart service"
+	@echo "  logs <service>           - show logs of service"
+	@echo "  attach <service>         - attach to service"
+	@echo "  exec <service> <command> - execute command in service"
+
+
 ifneq ($(filter prod, $(MAKECMDGOALS)),)
 	COMPOSE_FILE = "docker-compose-prod.yaml"
 endif
