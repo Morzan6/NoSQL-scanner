@@ -199,4 +199,5 @@ src-pwa
 src-ssr
 *.npmrc
 
-volumes
+volumes/nginx-conf.d
+volumes/cert
