@@ -2,6 +2,11 @@ DOCKER_COMPOSE = docker compose
 COMPOSE_FILE = "docker-compose-dev.yaml"
 DOCKER = docker
 
+ifneq ($(filter prod, $(MAKECMDGOALS)),)
+	COMPOSE_FILE = "docker-compose-prod.yaml"
+endif
+
+
 ifneq ($(filter restart logs attach exec,$(MAKECMDGOALS)),)
 	SERVICE = $(word 2, $(MAKECMDGOALS))
 	EXEC_COMMAND = $(word 3, $(MAKECMDGOALS))
