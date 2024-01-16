@@ -2,32 +2,30 @@ DOCKER_COMPOSE = docker compose
 COMPOSE_FILE = "docker-compose-dev.yaml"
 DOCKER = docker
 
-.PHONY: help
-
-help: 
-	@echo "Usage: make [target]"
-	@echo "Targets:"
-	@echo "  ps    - list all containers"
-	@echo "  build - build all containers"
-	@echo "  up    - start all containers"
-	@echo "  down  - stop all containers"
-	@echo 
-	@echo "  restart-all              - restart all containers"
-	@echo "  restart <service>        - restart service"
-	@echo "  logs <service>           - show logs of service"
-	@echo "  attach <service>         - attach to service"
-	@echo "  exec <service> <command> - execute command in service"
-
-
 ifneq ($(filter prod, $(MAKECMDGOALS)),)
 	COMPOSE_FILE = "docker-compose-prod.yaml"
 endif
-
 
 ifneq ($(filter restart logs attach exec,$(MAKECMDGOALS)),)
 	SERVICE = $(word 2, $(MAKECMDGOALS))
 	EXEC_COMMAND = $(word 3, $(MAKECMDGOALS))
 endif
+
+.PHONY: help
+
+help: 
+	@echo "Usage: make [target]"
+	@echo "Targets:"
+	@echo "  ps          - show all containers"
+	@echo "  build       - build all containers"
+	@echo "  up          - start all containers"
+	@echo "  down        - stop all containers"
+	@echo "  restart-all - restart all containers"
+	@echo 
+	@echo "  restart backend|frontend|nginx           - restart service"
+	@echo "  logs    backend|frontend|nginx           - show logs of service"
+	@echo "  attach  backend|frontend|nginx           - attach to service"
+	@echo "  exec    backend|frontend|nginx <command> - execute command in service"
 
 ps:
 	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) ps -a
