@@ -10,6 +10,7 @@ services:
     env_file: .env
     volumes:
       - ./volumes-dev/db:/NoSQL-Scanner/db
+      - ./volumes-dev/static:/NoSQL-Scanner/static
     networks:
       - nosql-scanner
     restart: always
@@ -28,6 +29,9 @@ services:
   nginx:
     image: nginx:1.25
     container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
     depends_on:
       - backend
       - frontend
@@ -35,13 +39,16 @@ services:
       - nosql-scanner
     volumes:
       - ./volumes-dev/nginx-conf.d:/etc/nginx/conf.d
+      - ./volumes-dev/static:/etc/static
     restart: always
 
 
 volumes:
   db:
+  static:
   nginx-conf.d:
 
 networks:
   nosql-scanner:
     driver: bridge
+
