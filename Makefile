@@ -1,26 +1,35 @@
 DOCKER_COMPOSE = docker compose
+DOCKER = docker
 
-ifneq ($(filter build up down restart logs clean,$(MAKECMDGOALS)),)
-	COMPOSE_FILE := "docker-compose-$(wordlist 2,2,$(MAKECMDGOALS)).yaml"
+ifneq ($(filter ps build up down restart-all ,$(MAKECMDGOALS)),)
+	COMPOSE_FILE = "docker-compose-$(word 2, $(MAKECMDGOALS)).yaml"
 endif
 
-build:
-	@$(DOCKER_COMPOSE) -f "docker-compose-$<.yaml" build
+ifneq ($(filter logs attach exec,$(MAKECMDGOALS)),)
+	SERVICE = $(word 2, $(MAKECMDGOALS))
+	EXEC_COMMAND = $(word 3, $(MAKECMDGOALS))
+endif
 
-up:
+ps:
+	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) ps -a
+
+build:
+	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) build
+
+up: 
 	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) up -d
 
 down:
 	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) down
 
-restart:
+restart-all:
 	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) restart
 
 logs:
-	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) logs -f
+	$(DOCKER) logs -f $(SERVICE) 
+
+attach:
+	@$(DOCKER) exec -it $(SERVICE) bash
 
 exec:
-	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) exec <SERVICE_NAME> <COMMAND>
-
-clean:
-	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) down -v
+	@$(DOCKER) exec $(SERVICE) $(EXEC_COMMAND)
