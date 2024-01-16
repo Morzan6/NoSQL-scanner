@@ -89,16 +89,6 @@ export default defineComponent({
 </template>
 
 <style lang="sass" scoped>
-.background
-  background-image: url("../../assets/auth-background.svg")
-  background-repeat: no-repeat
-  height: 100dvh
-  width: 100dvw
-  background-size: cover
-  display: flex
-  flex-wrap: wrap
-  justify-content: center
-  align-content: center
 
 .auth-list
   display: flex

@@ -2,26 +2,32 @@ const routes = [
   {
     path: "/",
     component: () => import("layouts/MainLayout.vue"),
-    redirect: !localStorage.getItem('access_token') ? "/auth" : "/dashboard",
+    redirect: !localStorage.getItem("access_token") ? "/auth" : "/dashboard",
     children: [
-      { 
-        path: "/auth", 
+      {
+        path: "/auth",
         component: () => import("pages/authpage/index.vue"),
         beforeEnter: (to, from, next) => {
-          if (localStorage.getItem('access_token')) {
-            next('/dashboard');
+          if (localStorage.getItem("access_token")) {
+            next("/dashboard");
           } else {
             next();
           }
         },
       },
-      { 
-        path: "/scans", 
-        component: () => import("pages/scanspage/index.vue"), // write ternator to "Login first" page
+      {
+        path: "/scans",
+        component: () =>
+          !localStorage.getItem("access_token")
+            ? import("pages/LoginFirst.vue")
+            : import("pages/scanspage/index.vue"), // ternator to "Login first" page
       },
-      { 
-        path: "/dashboard", 
-        component: () => import("pages/dashboard/index.vue")  // write ternator to "Login first" page
+      {
+        path: "/dashboard",
+        component: () => 
+        !localStorage.getItem("access_token")
+            ? import("pages/LoginFirst.vue")
+            : import("pages/scanspage/index.vue"), // ternator to "Login first" page
       },
     ],
   },
