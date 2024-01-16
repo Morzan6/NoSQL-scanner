@@ -12,7 +12,7 @@
         color="white"
         text-color="blue"
         unelevated
-        to="/scan"
+        to="/scans"
         label="Go Home"
         no-caps
       />

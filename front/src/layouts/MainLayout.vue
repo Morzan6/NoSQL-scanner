@@ -41,11 +41,16 @@ export default defineComponent({
   position: absolute
   right: 0
   width: 36%
-  min-height: 10vh
+  min-height: 8vh
   left: auto
   background-color: white
   border-radius: 0 0 0 24px
   box-shadow: rgba(0, 0, 0, 0.05) 0 27px 104.6px
+  padding: 1rem
+  body.screen--sm &
+    width: 60%
+  body.screen--xs &
+    width: inherit
 
 .flex-row-gap
   gap: 58px

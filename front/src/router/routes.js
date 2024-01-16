@@ -27,7 +27,7 @@ const routes = [
         component: () => 
         !localStorage.getItem("access_token")
             ? import("pages/LoginFirst.vue")
-            : import("pages/scanspage/index.vue"), // ternator to "Login first" page
+            : import("pages/dashboard/index.vue"), // ternator to "Login first" page
       },
     ],
   },
