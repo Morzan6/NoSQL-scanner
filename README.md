@@ -1,12 +1,12 @@
 # NoSQL-scanner
 
 
-## ** About NoSQL-scanner **
+## About NoSQL-scanner
 
 Some description
 
 
-## ** Installation **
+## Installation
 
 If you want to start NoSQL-scanner locally, you need to install docker and docker-compose.
 
