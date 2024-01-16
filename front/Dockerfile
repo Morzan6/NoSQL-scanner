@@ -1,4 +1,4 @@
-FROM node:21.5.0-bookworm as builder
+FROM node:21.5.0-alpine3.19
 WORKDIR /app
 
 COPY package.json package.json
@@ -17,5 +17,3 @@ COPY --from=builder /app/dist/spa dist/spa
 
 EXPOSE 4000
 ENTRYPOINT ["quasar", "serve", "dist/spa"]
-
-
