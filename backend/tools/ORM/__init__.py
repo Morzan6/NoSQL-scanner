@@ -1,4 +1,5 @@
 import datetime
+import argon2
 
 from argon2 import PasswordHasher
 from fastapi import HTTPException, status
@@ -54,7 +55,14 @@ class User:
         query: str = f"""SELECT password FROM Users WHERE username='{self.username}'"""
         self.db.execute(query)
         db_password = self.db.cursor.fetchone()
-        return PasswordHasher().verify(db_password[0], password)
+
+        hasher = PasswordHasher()
+
+        try:
+            return hasher.verify(db_password[0], password)
+        except argon2.exceptions.VerifyMismatchError:
+            return False
+
 
     def get_scans(self) -> List[int]:
         """Get all users scans
