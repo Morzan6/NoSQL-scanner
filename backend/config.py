@@ -6,7 +6,6 @@ ORIGINS = [
     "http://localhost",
     "http://localhost:9000",
     "https://predprof.tawt.fun/"
-    
 ]
 
 JWT_SECRET = os.environ.pop('JWT_SECRET', '1234')
