@@ -10,6 +10,7 @@ services:
     env_file: .env
     volumes:
       - ./volumes/db:/NoSQL-Scanner/db
+      - ./volumes/static:/NoSQL-Scanner/backend/static
     networks:
       - nosql-scanner
     restart: always
@@ -38,6 +39,7 @@ services:
       - nosql-scanner
     volumes:
       - ./volumes/cert:/etc/cert
+      - ./volumes/static:/etc/static
       - ./volumes/nginx-conf.d:/etc/nginx/conf.d
     restart: always
 
@@ -45,6 +47,7 @@ services:
 volumes:
   db:
   cert:
+  static:
   nginx-conf.d:
 
 networks:
