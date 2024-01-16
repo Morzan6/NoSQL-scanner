@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       context: backend
     container_name: backend
-    env_file: ./backend/.env
+    env_file: ./backend/.env.example
     volumes:
       - ./volumes-dev/db:/NoSQL-Scanner/db
       - ./volumes-dev/static:/NoSQL-Scanner/backend/static
