@@ -2,6 +2,7 @@
 import { defineComponent } from "vue";
 import requestSender from "components/request-sender";
 import { useQuasar } from "quasar";
+import { useCounterStore } from 'stores/auth';
 
 export default defineComponent({
   setup() {
@@ -24,6 +25,7 @@ export default defineComponent({
   },
   methods: {
     onSubmitLogin() {
+      const store = useCounterStore();
       const resp = requestSender(
         "post",
         process.env.API+"/auth/login/",
@@ -35,7 +37,8 @@ export default defineComponent({
       resp
         .then((res) => (localStorage.access_token = res.data.access_token))
         .catch((err) => this.showNotify(err.response.data.detail));
-      this.$router.push("scan");
+      store.isLogin = true;
+      this.$router.push("/dashboard")
     },
     onSubmitReg() {
       const resp = requestSender("post", process.env.API + "/auth/create/", {

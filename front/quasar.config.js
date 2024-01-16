@@ -65,7 +65,7 @@ module.exports = configure(function (ctx) {
       env: {
         API: ctx.dev
           ? "http://127.0.0.1:8000/api"
-          : "https://predprof.tawt.fun/api",
+          : "https://backend/api",
       },
       // rawDefine: {}
       // ignorePublicFolder: true,

@@ -15,7 +15,7 @@ export default defineComponent({
     <q-page-container class="background">
         <div class="box header-text">
             <p>Войдите, чтобы пользоваться сервисом</p>
-            <button class="default-text sub-button" @click="redirectToAuth(); console.log(1)">
+            <button class="default-text sub-button" @click="redirectToAuth()">
                 Войти
             </button>
         </div>

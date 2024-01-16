@@ -6,9 +6,9 @@
         <menu-button :href="'dashboard'" :text="'Доска'" />
       </div>
       <div v-if="!checkIfLogin">
-        <menu-button :href="'auth'" :text="'Вход'" />
+        <menu-button :href="'auth'" :text="buttonName()" />
       </div>
-      <div v-else> <menu-button :href="'logout'" :text="'User'" /></div>
+      <div v-else> <menu-button @click="logout()" :href="'/auth'" :text="'User'" /></div>
     </q-toolbar>
     <q-page-container>
       <router-view />
@@ -24,6 +24,19 @@ export default defineComponent({
   name: "MainLayout",
   components: { MenuButton },
   component: ["MenuButton"],
+  methods: {
+    logout() {
+      localStorage.removeItem("access_token");
+      this.text="Вход";
+    },
+    buttonName() {
+      if (!localStorage.getItem("access_token")) {
+        return 'Вход';
+      } else {
+        return 'User';
+      }
+    }
+  },
   computed: {
     checkIfLogin() {
       if (localStorage.access_token) {
@@ -31,7 +44,7 @@ export default defineComponent({
       } else {
         return false;
       }
-    }
+    },
   }
 });
 </script>

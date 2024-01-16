@@ -207,3 +207,4 @@ src-ssr
 volumes
 database.db
 docker-compose-prod.yaml
+icons
