@@ -26,7 +26,7 @@ make down
 docker compose -f docker-compose-dev.yaml down
 ```
 
-For more command see make help
+For additional commands see make help
 
 ```bash
 make help
