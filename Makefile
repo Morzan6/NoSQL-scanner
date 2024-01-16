@@ -1,9 +1,26 @@
-dev:
-	docker compose -f docker-compose-dev.yaml up -d --build
-down-dev:
-	docker compose -f docker-compose-dev.yaml down
+DOCKER_COMPOSE = docker compose
 
-prod:
-	docker compose up -d --build
-down-prod:
-	docker compose down
+ifneq ($(filter build up down restart logs clean,$(MAKECMDGOALS)),)
+	COMPOSE_FILE := "docker-compose-$(wordlist 2,2,$(MAKECMDGOALS)).yaml"
+endif
+
+build:
+	@$(DOCKER_COMPOSE) -f "docker-compose-$<.yaml" build
+
+up:
+	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) up -d
+
+down:
+	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) down
+
+restart:
+	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) restart
+
+logs:
+	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) logs -f
+
+exec:
+	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) exec <SERVICE_NAME> <COMMAND>
+
+clean:
+	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) down -v

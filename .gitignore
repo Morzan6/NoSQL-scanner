@@ -198,6 +198,16 @@ quasar.config.js.*
 src-pwa
 src-ssr
 *.npmrc
+.npmrc
+.editorconfig
+.eslintignore
+.eslintrc.*
+.index.vue.swp
 
+<<<<<<< HEAD
 volumes/nginx-conf.d
 volumes/cert
+=======
+volumes
+volumes-dev/db/database.db
+>>>>>>> 1df1ef9aa63fdfcd01a7d206a6dcbd31bf9731c4

@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Response
+from fastapi import APIRouter, HTTPException, status
 from tools.ORM import User
-from tools.auth import Token, JWT_PERMISSION
+from tools.auth import JWT_PERMISSION
 from tools.ORM import Scan
-from typing import Dict, Annotated, Any, List
+from typing import Dict, Annotated, List
 from serializers import ScanStartSerializer
 from nmap.scanner import Scanner
 import threading
