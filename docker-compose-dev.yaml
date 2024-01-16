@@ -10,7 +10,7 @@ services:
     env_file: .env
     volumes:
       - ./volumes-dev/db:/NoSQL-Scanner/db
-      - ./volumes-dev/static:/NoSQL-Scanner/static
+      - ./volumes-dev/static:/NoSQL-Scanner/backend/static
     networks:
       - nosql-scanner
     restart: always
