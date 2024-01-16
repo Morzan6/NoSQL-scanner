@@ -1,4 +1,3 @@
-import jwt
 import datetime
 
 from argon2 import PasswordHasher
@@ -66,7 +65,7 @@ class User:
         self.db.execute(f"""SELECT id FROM Scans WHERE user_id='{self.id}'""")
         return [i for (i,) in self.db.cursor.fetchall()]
 
-    def __repr__(self) -> str | None:
+    def __repr__(self) -> str:
         return f"User({str([self.id, self.username])})"
 
 

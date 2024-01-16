@@ -37,7 +37,7 @@ class Scanner:
         Returns:
             str | None: output of nmap command
         """
-        self.scan.status: str = "SCANNING"
+        self.scan.status = "SCANNING"
         self.scan.save()
         
         self.output = os.popen(self.cmd).read()

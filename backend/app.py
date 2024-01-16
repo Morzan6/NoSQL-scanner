@@ -1,7 +1,9 @@
-from fastapi import FastAPI
 import uvicorn
-import routes as RT
+
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+import routes as RT
 from tools.db import Database
 from config import *
 

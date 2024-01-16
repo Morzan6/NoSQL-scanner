@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Response
-from tools.auth import Token, JWT_PERMISSION
+from fastapi import APIRouter, HTTPException, status
+from tools.auth import Token
 from tools.ORM import User
-from typing import Annotated, Dict
+from typing import Dict
 from serializers import UserLoginSerializer, TokenSerializer
 
 ENDPOINT = "auth"
@@ -24,13 +24,12 @@ def create(data: UserLoginSerializer) -> Dict[str, str]:
     user: User = User(data.username)
     
     if user.is_exist:
-        print(user.id)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User with this username already exists",
         )
+
     user.create(data.password)
-    print(user)
     return {"status": "User successfully added"}
 
 

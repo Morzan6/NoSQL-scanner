@@ -62,7 +62,3 @@ class Database:
                 );"""
         self.execute(users)
         self.execute(scans)
-
-
-# db = Database()
-# print(db.check_table("Scans"))

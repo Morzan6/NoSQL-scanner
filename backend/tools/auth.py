@@ -1,17 +1,17 @@
-import hashlib
-from tools.db import Database
-from pydantic import BaseModel, Field
-from fastapi import HTTPException, status, Request, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import jwt
 import time
-from typing import Dict, Any, List
+
+from fastapi import HTTPException, status, Request, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from typing import Any
+
 from config import JWT_SECRET, JWT_ALGORITHM
 from tools.ORM import User
 
 class Token:
     """Object to handle JWT token"""
 
+    @staticmethod
     def generate_token(username: str) -> str:
         """Generate JWT token with given username
         Args:
@@ -21,11 +21,11 @@ class Token:
             str: JWT access token
         """
         payload: dict = {"username": username, "expires": int(time.time() + 86400)}
-        print(payload)
         token: str = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
         return token
 
+    @staticmethod
     def decode_token(token: str) -> dict:
         """Decodes JWT token or raises exceptions if some error occured
 

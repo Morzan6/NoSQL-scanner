@@ -205,4 +205,5 @@ src-ssr
 .index.vue.swp
 
 volumes
+database.db
 docker-compose-prod.yaml

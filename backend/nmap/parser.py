@@ -137,15 +137,9 @@ def parse_service(s: str) -> dict:
 
 
 TOKEN = ""
-YP_TOKEN = (
-    os.getenv("YP_TOKEN")
-    or "y0_AgAAAAAmBdaJAATuwQAAAAD3eEAr6yvk4eLsRJ2SN3ddbl_HbQjpLRs"
-)
+YP_TOKEN = os.environ.pop('YP_TOKEN')
+
 if not YP_TOKEN:
     raise ValueError("Could not get yandex translator YP token")
 
 known_recs = json.load(open(os.path.join(os.path.dirname(__file__), "cves.json"), "r"))
-
-# if __name__ == "__main__":
-#     res = parse_service(scan1)
-#     print(json.dumps(res))
