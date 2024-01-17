@@ -2,66 +2,74 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "SmallScan",
-    props: {
-        id: {
-            type: Number,
-            default: 0
-        },
-        name: {
-            type: String,
-            default: "I am your default scan"
-        },
-        ip: {
-            type: String,
-            default: "123.123.123.123"
-        },
-        service: {
-            default: 'redis'
-        },
-        timedelta: {
-            type: String,
-            default: "1 сек. назад"
-        }
+  name: "SmallScan",
+  props: {
+    id: {
+      type: Number,
+      default: 0,
     },
-    computed: {
-        serviceImage() {
-            return `../../public/db-icons/${this.service}.png`;
-        }
-    }
+    name: {
+      type: String,
+      default: "I am your default scan",
+    },
+    ip: {
+      type: String,
+      default: "123.123.123.123",
+    },
+    service: {
+      default: "redis",
+    },
+    timedelta: {
+      type: String,
+      default: "1 сек. назад",
+    },
+  },
+  computed: {
+    serviceImage() {
+      return `/db-icons/${this.service}.svg`;
+    },
+    linkToReport() {
+      return `/report/${this.id}`;
+    },
+  },
 });
-
 </script>
 
 <template>
-    <div class="bar">
-        <p class="id">{{ id }}</p>
-        <p class="name">{{ name }}</p>
-        <p class="ip">{{ ip }}</p>
-        <img class="service" :src="serviceImage">
-        <p class="timedelta">{{ timedelta }}</p>
-    </div>
+  <a class="bar" :href="linkToReport">
+    <p class="id">{{ id }}</p>
+    <p class="name">{{ name }}</p>
+    <p class="ip">{{ ip }}</p>
+    <img class="service" :src="serviceImage" />
+    <p class="timedelta">{{ timedelta }}</p>
+  </a>
 </template>
 
 <style scoped lang="sass">
 .bar
     width: inherit
-    background: #F1F2F5
+    text-decoration: none
+    color: #2D2D2D
+    background: #FFF
     padding: 1.2rem 1rem 1.2rem
     font-size: 26px
     text-overflow: ellipsis
-    
+
     align-items: center
     justify-content: space-between
-    
+
     flex-flow: row wrap
-    border-radius: 10px
+    border-radius: 0.6875rem
     display: flex
-    
-    box-shadow: rgba(0, 0, 0, .05) 0 27px 104.6px
+
+    box-shadow: 0px 27px 104.6px 0px rgba(0, 0, 0, 0.05)
+    margin-bottom: 1rem
+
 
     & > *:not(:last-child)
         margin-right: 2rem
+    &:hover
+        background: #F1F2F5
 .id
     width: 2rem
     color: #8D8A8A
@@ -74,17 +82,17 @@ export default defineComponent({
         height: 4px
         border-radius: 10px
         background: #D62828
-        width: 100%
-    
+        width: 80%
+
 .service
     width: auto
-    height: 4.5rem
+    height: 4rem
     flex-shrink: 0
 
 .name
-    width: 20rem
+    width: 16rem
 .timedelta
-    width: 10rem
+    width: 12rem
     color: #8D8A8A
 p
     margin: 0px 0px 0px

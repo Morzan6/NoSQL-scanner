@@ -3,7 +3,8 @@ import { defineComponent } from "vue";
 
 
 export default defineComponent({
-  name: "DashboardPage",
+  name: "ReportPage",
+  props: ['id']
 });
 </script>
 
@@ -11,7 +12,7 @@ export default defineComponent({
   <q-page-container class="background">
     <div class="columns">
       <div class="scans-column">
-        3 scans with diogram
+        report information {{ id }}
       </div>
       <div class="start-scan-column">
         scanning component

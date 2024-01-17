@@ -1,13 +1,82 @@
 <script>
 import { defineComponent } from "vue";
 import smallScan from "../../components/smallScan.vue";
-
-
+import requestSender from "components/request-sender";
+import formatTimeDelta from "./timedelta.js";
 
 export default defineComponent({
-  name: "ScanPage",
-  components: {smallScan},
-  component: ['smallScan']
+  mounted() {
+    this.setChunkSize();
+  },
+  created() {
+    window.addEventListener("resize", this.setChunkSize);
+  },
+  name: "ScansPage",
+  components: { smallScan },
+  component: ["smallScan"],
+  methods: {
+    setChunkSize() {
+      if (window.innerWidth < 1300) {
+        this.chunkSize = 3;
+      } else if (window.innerWidth < 1520) {
+        this.chunkSize = 5;
+      } else if (window.innerWidth < 1750) {
+        this.chunkSize = 6;
+      } else if (window.innerWidth < 2200) {
+        this.chunkSize = 7;
+      } else if (window.innerWidth < 2500) {
+        this.chunkSize = 8;
+      } else if (window.innerWidth < 2700) {
+        this.chunkSize = 9;
+      }
+    },
+    timeDelta(time) {
+      return formatTimeDelta(time);
+    },
+    prevSlide() {
+      if (this.currentPage > 0) {
+        this.currentPage--;
+      }
+    },
+    nextSlide() {
+      if (this.currentPage < this.chunkedScans().length - 1) {
+        this.currentPage++;
+      }
+    },
+    chunkedScans() {
+      const scansCopy = [...this.scans];
+      const result = [];
+
+      while (scansCopy.length > 0) {
+        result.push(scansCopy.splice(0, this.chunkSize));
+      }
+
+      return result;
+    },
+  },
+  data() {
+    return {
+      scans: [],
+      currentPage: 0,
+      chunkSize: 7,
+      isLoading: true
+    };
+  },
+
+  beforeMount() {
+    const resp = requestSender(
+      "get",
+      process.env.API + "/scan/my/",
+      {
+        username: this.name,
+        password: this.password,
+      },
+      localStorage.getItem("access_token")
+    );
+    resp
+      .then((res) => {this.scans = res.data; this.isLoading = false})
+      .catch((err) => this.showNotify(err.response.data.detail));
+  },
 });
 </script>
 
@@ -15,23 +84,62 @@ export default defineComponent({
   <q-page-container class="background">
     <div class="columns">
       <div class="scans-column">
-        <smallScan />
-        list of reports
-      </div>
-      <div class="start-scan-column">
-        scanning component
         
+        <img class="loading" src="/loading3.svg" v-if="isLoading">
+        <smallScan
+          v-for="s in chunkedScans()[this.currentPage]"
+          :key="s.id"
+          :id="s.id"
+          :name="s.name"
+          :ip="s.ip"
+          :service="s.type"
+          :timedelta="timeDelta(s.datetime)"
+        />
+        <div v-if="!!scans" class="buttons">
+          <button
+            class="button"
+            style="margin-right: 5rem"
+            @click="prevSlide"
+            :disabled="this.currentPage === 0"
+          >
+            Назад
+          </button>
+          <button
+            style="margin-left: 5rem"
+            @click="nextSlide"
+            class="button"
+            :disabled="this.currentPage === chunkedScans().length - 1"
+          >
+            Вперед
+          </button>
+        </div>
       </div>
+
+      <div class="start-scan-column">{{ this.currentPage }}</div>
     </div>
   </q-page-container>
- </template>
- 
- <style scoped lang="sass">
-.report
- display: flex
- background-color: #F1F2F5
- margin-top: 4rem
- width: 20rem
+</template>
 
- </style>
+<style scoped lang="sass">
+.loading
+  position: absolute
+  bottom: 50%
+  height: 90px
+  left: 30%
+.buttons
+  display: flex
+  justify-content: center
+  margin-bottom: 2rem
 
+.button
+  border: none
+  position: fixed
+  bottom: 36px
+  background-color: #D62828
+  color: white
+  border-radius: 10px
+  padding: 4px 9px 4px
+  font-weight: 600
+  &:hover
+    background-color: #C21414
+</style>

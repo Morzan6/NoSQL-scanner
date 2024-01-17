@@ -41,6 +41,11 @@ class Scanner:
         self.scan.save()
         
         self.output = os.popen(self.cmd).read()
+        
+        if "Host seems down" in self.output:
+            self.scan.status = "FAILED"
+            self.scan.save()
+            return None
         parsed = parse_service(self.output)
         
         service_type: str = parsed.get('service')

@@ -27,6 +27,11 @@ const routes = [
         path: "/dashboard",
         component: () => import("pages/dashboard/index.vue"), // ternator to "Login first" page
       },
+      {
+        path: "/report/:id",
+        component: () => import("pages/reportpage/index.vue"),
+        props: true,
+      },
     ],
   },
 

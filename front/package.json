@@ -1,7 +1,7 @@
 {
   "name": "nosqlscanner",
   "version": "0.0.1",
-  "description": "A Quasar Project",
+  "description": "Simple scanner for NoSQL Databases",
   "productName": "NoSQL-scanner",
   "author": "druZhba",
   "private": true,
