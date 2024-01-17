@@ -27,7 +27,7 @@ export default defineComponent({
   <a
     class="default-text"
     :class="onPage"
-    v-on:click="$router.replace(this.href)"
+    v-on:click="this.$router.push(`/${this.href}`)"
     >{{ text }}</a
   >
 </template>
