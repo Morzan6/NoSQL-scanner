@@ -7,19 +7,41 @@ import { defineComponent } from "vue";
 import { Chart } from "frappe-charts";
 export default defineComponent({
   name: "Chart",
-  data() {
-    return {
-      data: {
-        labels: ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+  props: {
+    isEmpty: {
+      type: Boolean,
+      default: true
+    },
+    countLow: {
+      type: Number,
+      default: 0
+    },
+    countMedium: {
+      type: Number,
+      default: 0
+    },
+    countHigh: {
+      type: Number,
+      default: 0
+    },
+    countCritical: {
+      type: Number,
+      default: 0
+    }
+  },
+  computed: {
+    data() {
+      return  {
+        labels: this.isEmpty ? ["CVE НЕТ"] : ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
         datasets: [
           {
             name: "CVEs",
             chartType: "line",
-            values: [1, 2, 3, 0],
+            values: this.isEmpty ? [1] : [this.countLow, this.countMedium, this.countHigh, this.countCritical],
           },
         ],
-      },
-    };
+      }
+    }
   },
   mounted() {
     const chart = new Chart("#chart", {
@@ -28,7 +50,7 @@ export default defineComponent({
       type: "pie",
       height: 270,
       colors:
-        this.data.datasets[0].values.length === 0
+        this.isEmpty
           ? ["#2D2D2D"]
           : ["#FFEC8B", "#F8C373", "#EB8788", "#D62828"],
     });

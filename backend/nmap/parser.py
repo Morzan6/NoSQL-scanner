@@ -61,9 +61,7 @@ def _process_cve(cve: dict) -> dict:
     base_severity = r["impact"]["baseMetricV2"]["severity"]
     return {
         "id": id,
-        "description": translate(cve["description"])
-        if cve["description"]
-        else translate(r["cve"]["description"]["description_data"][0]["value"]),
+        "description": cve["description"],
         "versions": r["configurations"]["nodes"],
         "impact_version": version,
         "base_score_v2": base_score,
@@ -91,7 +89,7 @@ def _process_cves(service: str, cves: List[dict]) -> List[dict]:
 
 def parse_service(s: str) -> dict:
     global TOKEN
-    TOKEN = _get_iam()
+    #TOKEN = _get_iam()
     lines = s.split("\n")
     lines = lines[5:]
     port, state, service, reason, *service_display_name, service_version = filter(

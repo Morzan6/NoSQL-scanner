@@ -105,8 +105,8 @@ def get_scan(
             detail="You can not access another user's scan",
         )
 
-    scan.type = "redis"
-    scan.save()
+    # scan.type = "redis"
+    # scan.save()
 
     return {
         "id": scan.id,

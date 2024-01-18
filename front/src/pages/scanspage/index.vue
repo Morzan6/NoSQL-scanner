@@ -66,11 +66,8 @@ export default defineComponent({
   beforeMount() {
     const resp = requestSender(
       "get",
-      process.env.API + "/scan/my/",
-      {
-        username: this.name,
-        password: this.password,
-      },
+      process.env.API + "/scan/my/", 
+      {},
       localStorage.getItem("access_token")
     );
     resp

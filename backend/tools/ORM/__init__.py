@@ -132,7 +132,7 @@ class Scan:
         type: str = None,
         status: str = "STARTED",
         version: str = None,
-        vuln_data: str = None,
+        vuln_data: str = "{}",
     ):
         """Creates new scan in Database and returns self objec with given propperties
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default async function requestSender(method, address, data, token='') {
+export default async function requestSender(method, address, data={}, token='') {
   return await axios({
     method: method,
     url: address,
