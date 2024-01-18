@@ -1,5 +1,5 @@
 <template>
-  <div id="chart" class="chart"></div>
+  <div :id="niceId" class="chart"></div>
 </template>
 
 <script>
@@ -8,9 +8,8 @@ import { Chart } from "frappe-charts";
 export default defineComponent({
   name: "Chart",
   props: {
-    isEmpty: {
-      type: Boolean,
-      default: true
+    id: {
+      default:'chart'
     },
     countLow: {
       type: Number,
@@ -30,31 +29,47 @@ export default defineComponent({
     }
   },
   computed: {
+    niceId(){
+      return `chart${this.id}`
+    },
     data() {
       return  {
-        labels: this.isEmpty ? ["CVE НЕТ"] : ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+
+        labels: this.state ? ["CVE НЕТ"] : ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
         datasets: [
           {
             name: "CVEs",
             chartType: "line",
-            values: this.isEmpty ? [1] : [this.countLow, this.countMedium, this.countHigh, this.countCritical],
+            values: this.state ? [1] : [this.countLow, this.countMedium, this.countHigh, this.countCritical],
           },
         ],
       }
+    },
+    state() {
+      console.log( this.isEmpty)
+    if ( this.countLow != 0 || this.countMedium != 0 || this.countHigh != 0 || this.countCritical != 0) {
+      return false
+    } else {
+      return true
+    }
     }
   },
   mounted() {
-    const chart = new Chart("#chart", {
+    const chart = new Chart(`#${this.niceId}`, {
       tittle: "",
       data: this.data,
       type: "pie",
       height: 270,
       colors:
-        this.isEmpty
+      this.state
           ? ["#2D2D2D"]
           : ["#FFEC8B", "#F8C373", "#EB8788", "#D62828"],
     });
+    
   },
+  methods: {
+   
+  }
 });
 </script>
 <style scoped lang="sass">
@@ -65,4 +80,5 @@ export default defineComponent({
  width: 310px
  padding: 0px
  box-shadow: 0px 27px 104.6px 0px rgba(0, 0, 0, 0.05)
+ margin-bottom: 1rem
 </style>

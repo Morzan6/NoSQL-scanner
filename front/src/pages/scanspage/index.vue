@@ -72,7 +72,7 @@ export default defineComponent({
     );
     resp
       .then((res) => {
-        this.scans = res.data;
+        this.scans = res.data.reverse();
         this.isLoading = false;
       })
       .catch((err) => this.showNotify(err.response.data.detail));

@@ -39,8 +39,8 @@ class Scanner:
         """
         self.scan.status = "SCANNING"
         self.scan.save()
-        
         self.output = os.popen(self.cmd).read()
+        print(self.output)
         if "Host seems down" in self.output:
             self.scan.status = "FAILED"
             self.scan.save()
