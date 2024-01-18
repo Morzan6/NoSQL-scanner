@@ -59,7 +59,7 @@ export default defineComponent({
       scans: [],
       currentPage: 0,
       chunkSize: 7,
-      isLoading: true
+      isLoading: true,
     };
   },
 
@@ -74,7 +74,10 @@ export default defineComponent({
       localStorage.getItem("access_token")
     );
     resp
-      .then((res) => {this.scans = res.data; this.isLoading = false})
+      .then((res) => {
+        this.scans = res.data;
+        this.isLoading = false;
+      })
       .catch((err) => this.showNotify(err.response.data.detail));
   },
 });
@@ -84,8 +87,7 @@ export default defineComponent({
   <q-page-container class="background">
     <div class="columns">
       <div class="scans-column">
-        
-        <img class="loading" src="/loading3.svg" v-if="isLoading">
+        <img class="loading" src="/loading3.svg" v-if="isLoading" />
         <smallScan
           v-for="s in chunkedScans()[this.currentPage]"
           :key="s.id"
@@ -95,7 +97,10 @@ export default defineComponent({
           :service="s.type"
           :timedelta="timeDelta(s.datetime)"
         />
-        <div v-if="!!scans" class="buttons">
+        <div v-if="this.scans.length === 0 && !isLoading" class="emptyScan">
+          У вас еще нет сканов
+        </div>
+        <div v-if="chunkedScans().length > 1" class="buttons">
           <button
             class="button"
             style="margin-right: 5rem"
@@ -121,6 +126,23 @@ export default defineComponent({
 </template>
 
 <style scoped lang="sass">
+
+.emptyScan
+    width: inherit
+    color: #2D2D2D
+    background: #FFF
+    padding: 1.2rem 1rem 1.2rem
+    font-size: 26px
+
+    align-items: center
+    justify-content: center
+
+    border-radius: 0.6875rem
+    display: flex
+
+    box-shadow: 0px 27px 104.6px 0px rgba(0, 0, 0, 0.05)
+    margin-bottom: 1rem
+
 .loading
   position: absolute
   bottom: 50%

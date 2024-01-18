@@ -5,8 +5,7 @@ export default defineComponent({
   name: "SmallScan",
   props: {
     id: {
-      type: Number,
-      default: 0,
+      type: Number, 
     },
     name: {
       type: String,
@@ -14,14 +13,13 @@ export default defineComponent({
     },
     ip: {
       type: String,
-      default: "123.123.123.123",
+      default: "",
     },
     service: {
-      default: "redis",
+      default: "None",
     },
     timedelta: {
       type: String,
-      default: "1 сек. назад",
     },
   },
   computed: {
