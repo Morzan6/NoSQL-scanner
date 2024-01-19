@@ -137,6 +137,7 @@ p
  margin: 0
 .scan-bar
  font-family: "Inter", sans-serif
+ box-shadow: 0px 27px 104.6px 0px rgba(0, 0, 0, 0.05)
  display: flex
  border-radius: 0.6875rem
  background: #FFF
@@ -148,6 +149,7 @@ p
  
 .button
  margin-left: 1rem
+ box-shadow: 0px 27px 104.6px 0px rgba(0, 0, 0, 0.05)
  text-decoration: none
  margin-top: 1rem
  border-radius: 1rem

@@ -49,7 +49,7 @@ export default defineComponent({
     text-decoration: none
     color: #2D2D2D
     background: #FFF
-    padding: 1.2rem 1rem 1.2rem
+    padding: 1.2rem 1.2rem 1.2rem
     font-size: 26px
     text-overflow: ellipsis
 
@@ -84,7 +84,7 @@ export default defineComponent({
 
 .service
     width: auto
-    height: 4rem
+    height: 3.5rem
     flex-shrink: 0
 
 .name
@@ -92,6 +92,7 @@ export default defineComponent({
 .timedelta
     width: 12rem
     color: #8D8A8A
+    font-size: 22px
 p
     margin: 0px 0px 0px
 </style>

@@ -40,7 +40,7 @@ export default defineComponent({
           {
             name: "CVEs",
             chartType: "line",
-            values: this.state ? [1] : [this.countLow, this.countMedium, this.countHigh, this.countCritical],
+            values: this.state ? [1337] : [this.countLow, this.countMedium, this.countHigh, this.countCritical],
           },
         ],
       }
