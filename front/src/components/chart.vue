@@ -46,8 +46,8 @@ export default defineComponent({
       }
     },
     state() {
-      console.log( this.isEmpty)
-    if ( this.countLow != 0 || this.countMedium != 0 || this.countHigh != 0 || this.countCritical != 0) {
+     
+    if ( this.countLow !== 0 || this.countMedium !== 0 || this.countHigh !== 0 || this.countCritical !== 0) {
       return false
     } else {
       return true
@@ -79,6 +79,6 @@ export default defineComponent({
  border-radius: 0.6875rem
  width: 310px
  padding: 0px
- box-shadow: 0px 27px 104.6px 0px rgba(0, 0, 0, 0.05)
+ box-shadow: 0px 27px 104.6px 0px rgba(0, 0, 0, 0.1)
  margin-bottom: 1rem
 </style>

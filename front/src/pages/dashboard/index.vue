@@ -80,7 +80,10 @@ export default defineComponent({
         return {};
       }
       data.vulnerability_data.cves.forEach((entry) => {
-        const severity = entry.base_severity_v2;
+        let severity = entry.base_severity_v3;
+        if (entry.base_severity_v3 === "") {
+          severity = entry.base_severity_v2;
+        }
         if (severity) {
           severityCounts[severity] = (severityCounts[severity] || 0) + 1;
         }
