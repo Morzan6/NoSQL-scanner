@@ -19,6 +19,7 @@
     "@quasar/extras": "^1.16.4",
     "axios": "^1.2.1",
     "frappe-charts": "^1.6.2",
+    "marked": "^11.1.1",
     "npm": "^10.2.5",
     "pinia": "^2.1.7",
     "quasar": "^2.6.0",

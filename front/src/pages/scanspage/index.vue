@@ -156,7 +156,7 @@ export default defineComponent({
   bottom: 36px
   background-color: #D62828
   color: white
-  border-radius: 10px
+  border-radius: 5px
   padding: 4px 9px 4px
   font-weight: 600
   &:hover

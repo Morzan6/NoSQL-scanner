@@ -3,16 +3,20 @@ import { defineComponent } from "vue";
 import axios from "axios";
 import formatTimeDelta from "../timedelta.js";
 import chart from "../../components/chart.vue";
+import modalCVE from "../../components/modalСVE.vue";
+import modalOtherVulns from "../../components/modalOtherVulns.vue";
 
 export default defineComponent({
   name: "ReportPage",
   props: ["id"],
-  components: { chart },
+  components: { chart, modalCVE, modalOtherVulns },
   component: ["chart"],
   data() {
     return {
       scan: [],
       isLoading: true,
+      modalOpen: [],
+      modalOtherOpen: false,
     };
   },
   beforeMount() {
@@ -54,7 +58,6 @@ export default defineComponent({
           severityCounts[severity] = (severityCounts[severity] || 0) + 1;
         }
       });
-      console.log(severityCounts);
       return severityCounts;
     },
     countVulns(data) {
@@ -94,6 +97,12 @@ export default defineComponent({
         CRITICAL: "#D62828",
       };
       return colors[sev];
+    },
+    openModal(index) {
+      this.modalOpen[index] = true;
+    },
+    closeModal(index) {
+      this.modalOpen[index] = false;
     },
   },
   computed: {
@@ -165,21 +174,32 @@ export default defineComponent({
             </div>
             <div v-else>
               <div
-                class="cve"
-                v-for="cve in scan.vulnerability_data.cves"
-                :key="cve.id"
+                v-for="(cve, index) in scan.vulnerability_data.cves"
+                :key="index"
               >
-                <p>{{ cve.id }}</p>
-                <p :style="{ color: this.colorCVE(this.severity(cve)) }">
-                  {{ this.severity(cve) }}
-                </p>
-                <p>{{ this.score(cve) }}</p>
+                <button class="cve" @click="openModal(index)">
+                  <p>{{ cve.id }}</p>
+                  <p :style="{ color: this.colorCVE(this.severity(cve)) }">
+                    {{ this.severity(cve) }}
+                  </p>
+                  <p>{{ this.score(cve) }}</p>
+                </button>
+                <modalCVE
+                  :isOpen="modalOpen[index]"
+                  :closeModal="() => closeModal(index)"
+                  :name="cve.id"
+                  :severity="this.severity(cve)"
+                  :score="this.score(cve).toString()"
+                  :description="cve.description"
+                  :recomendation="cve.rec"
+                ></modalCVE>
               </div>
             </div>
           </div>
           <div class="other-list">
-            <div
+            <button
               class="cve"
+              @click="modalOtherOpen = !modalOtherOpen"
               v-if="countVulns(this.scan).Other !== 0"
               style="width: 50%; display: flex; flex-direction: row"
             >
@@ -187,7 +207,16 @@ export default defineComponent({
               <p style="margin-left: 2rem; color: #8d8a8a">
                 {{ countVulns(this.scan).Other }}
               </p>
-            </div>
+            </button>
+            <modalOtherVulns
+              :vulns="scan.vulnerability_data.vulns"
+              :isOpen="modalOtherOpen"
+              :closeModal="
+                () => {
+                  modalOtherOpen = false;
+                }
+              "
+            />
             <a
               class="button"
               :href="linkToReport"
@@ -235,6 +264,8 @@ export default defineComponent({
   padding: 1rem
   border-radius: 0.7rem
   font-size: 24px
+  width: 100%
+  border: none
   font-weight: 500
   display: flex
   justify-content: space-between
@@ -243,6 +274,8 @@ export default defineComponent({
     width: 20rem
   p:last-child
     width: 5rem
+  &:hover
+    background: #D0D0D0
 .main-container
  font-family: "Inter", sans-serif
  background: #fff
@@ -327,19 +360,4 @@ export default defineComponent({
   p:not(.status)
     margin-left: 1.5rem
     color: #8D8A8A
-
-*::-webkit-scrollbar
-  width: 8px
-
-  margin-right: 100rem
-  border-radius: 0.7rem
-
-*::-webkit-scrollbar-track
-  background: #FFF
-  border-radius: 0.7rem
-
-*::-webkit-scrollbar-thumb
-  background-color: rgba(0, 0, 0, .24)
-  border-radius: 8px
-  border: none
 </style>
