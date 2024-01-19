@@ -2,7 +2,7 @@
 import { defineComponent } from "vue";
 import smallScan from "../../components/smallScan.vue";
 import requestSender from "components/request-sender";
-import formatTimeDelta from "./timedelta.js";
+import formatTimeDelta from "../timedelta.js";
 
 export default defineComponent({
   mounted() {

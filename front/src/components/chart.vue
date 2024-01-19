@@ -56,7 +56,7 @@ export default defineComponent({
   },
   mounted() {
     const chart = new Chart(`#${this.niceId}`, {
-      tittle: "",
+      tittle: "CVEs",
       data: this.data,
       type: "pie",
       height: 270,
