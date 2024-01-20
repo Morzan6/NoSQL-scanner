@@ -35,10 +35,13 @@ export default defineComponent({
         }
       );
       resp
-        .then((res) => (localStorage.access_token = res.data.access_token))
+        .then((res) => {
+          localStorage.access_token = res.data.access_token;
+          store.isLogin = true;
+          this.$router.go("/auth")
+        })
         .catch((err) => this.showNotify(err.response.data.detail));
-      store.isLogin = true;
-      this.$router.push("/dashboard")
+      
     },
     onSubmitReg() {
       const resp = requestSender("post", process.env.API + "/auth/create/", {
@@ -60,7 +63,7 @@ export default defineComponent({
         Войти или Зарегистрироваться
         <img
           src="../../assets/strip.svg"
-          style="width: 569px; align-self: center"
+          style="width: 100%; align-self: center"
         />
       </q-item>
       <q-item>
@@ -92,21 +95,24 @@ export default defineComponent({
 </template>
 
 <style lang="sass" scoped>
+.row
+  max-width: 100%
 
 .auth-list
   display: flex
   flex-direction: column
-  width: 828px
-  height: 622px
+  max-width: 100%  // Set maximum width to 100% of the parent container
+  height: auto     // Set height to auto to allow it to adjust based on content
   background: white
   box-shadow: rgba(0, 0, 0, .05) 0 27px 104.6px
   border-radius: 24px
   justify-content: center
   align-content: center
   flex-wrap: wrap
+  padding: 2rem 3rem 2rem    // Add padding for better spacing
 
 .input
-  width: 738px
+  width: 100%       // Set width to 100% to adjust based on the parent container
   height: 101px
   border: none
   border-radius: 24px
@@ -119,12 +125,13 @@ export default defineComponent({
     background-color: #E7E8E8
 
 .sub-button
-  width: 359px
-  height: 101px
+  width: 100%       // Set width to 100% to adjust based on the parent container
+  height: 100%
   border: none
   border-radius: 24px
   background-color: #D62828
   color: white
+  padding: 2rem 0rem 2rem
 
   &:hover
     background-color: #C21414
@@ -134,4 +141,25 @@ export default defineComponent({
   flex-direction: column
   text-align: center
   margin-bottom: 41px
+
+// Media query for smaller screens
+@media screen and (max-width: 600px) 
+  .auth-list
+    padding: 2rem
+    margin: 0 1rem 0
+    
+  .input, .sub-button
+    width: 100%   // Adjust width to 100% for smaller screens
+  
+  .col-6:not(:last-child)
+    flex: 1
+    .sub-button
+      
+      width: 100%
+  .col-6:not(:first-child)
+    flex: 2
+    .sub-button
+        width: 150%
+
+
 </style>

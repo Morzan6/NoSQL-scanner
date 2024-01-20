@@ -81,4 +81,10 @@ export default defineComponent({
  padding: 0px
  box-shadow: 0px 27px 104.6px 0px rgba(0, 0, 0, 0.1)
  margin-bottom: 1rem
+ 
+ @media (min-width: 992px)
+  width: 270px
+   
+ @media (min-width: 1200px)
+  width: 310px
 </style>
