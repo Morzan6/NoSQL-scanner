@@ -57,7 +57,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <q-page-container class="background">
+  <q-page-container class="background-auth">
     <q-list class="auth-list">
       <q-item class="header-text text-align-center">
         Войти или Зарегистрироваться

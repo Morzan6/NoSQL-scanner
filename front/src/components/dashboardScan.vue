@@ -146,17 +146,12 @@ p
  height: 13rem
  margin-left: 1rem
  flex-direction: column
- @media (min-width: 300px)
-  width:100%
- @media (min-width: 768px) 
+ @media screen and (max-width: 1600px)
+  width: 50rem
+ @media screen and (max-width: 1200px)
+  width: 34rem
+ @media screen and (max-width: 900px)
   width: 100%
-
- 
- @media (min-width: 992px)
-  width: 100%
-   
- @media (min-width: 1200px)
-  width: 48rem
  
 .button
  margin-left: 1rem

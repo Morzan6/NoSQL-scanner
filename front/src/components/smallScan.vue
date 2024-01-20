@@ -45,7 +45,7 @@ export default defineComponent({
 
 <style scoped lang="sass">
 .bar
-    width: inherit
+    width: 100%
     text-decoration: none
     color: #2D2D2D
     background: #FFF
@@ -55,6 +55,8 @@ export default defineComponent({
 
     align-items: center
     justify-content: space-between
+    @media screen and (max-width: 900px)
+      justify-content: start
 
     flex-flow: row wrap
     border-radius: 0.6875rem
@@ -71,6 +73,7 @@ export default defineComponent({
 .id
     width: 2rem
     color: #8D8A8A
+    margin-right: 1rem
 .ip
     width:12rem
 
@@ -90,7 +93,7 @@ export default defineComponent({
 .name
     width: 16rem
 .timedelta
-    width: 12rem
+    width: 9rem
     color: #8D8A8A
     font-size: 22px
 p

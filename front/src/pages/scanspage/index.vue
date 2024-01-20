@@ -16,9 +16,9 @@ export default defineComponent({
   component: ["smallScan"],
   methods: {
     setChunkSize() {
-      if (window.innerWidth < 1300) {
-        this.chunkSize = 3;
-      } else if (window.innerWidth < 1520) {
+      if (window.innerWidth < 600) {
+        this.chunkSize = 4;
+      } else if (window.innerWidth < 900) {
         this.chunkSize = 5;
       } else if (window.innerWidth < 1750) {
         this.chunkSize = 6;
@@ -140,11 +140,7 @@ export default defineComponent({
     box-shadow: 0px 27px 104.6px 0px rgba(0, 0, 0, 0.05)
     margin-bottom: 1rem
 
-.loading
-  position: absolute
-  bottom: 50%
-  height: 90px
-  left: 30%
+
 .buttons
   display: flex
   justify-content: center

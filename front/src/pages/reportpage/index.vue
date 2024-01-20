@@ -130,7 +130,7 @@ export default defineComponent({
               <p class="version">{{ scan.version }}</p>
             </div>
           </div>
-          <div class="row">
+          <div class="middle-row">
             <div class="info">
               <div class="f-column">
                 <p class="status">{{ scan.status }}</p>
@@ -201,7 +201,7 @@ export default defineComponent({
               class="cve"
               @click="modalOtherOpen = !modalOtherOpen"
               v-if="countVulns(this.scan).Other !== 0"
-              style="width: 50%; display: flex; flex-direction: row"
+              style="width: 60%; display: flex; flex-direction: row"
             >
               ДРУГИЕ УЯЗВИМОСТИ
               <p style="margin-left: 2rem; color: #8d8a8a">
@@ -235,6 +235,15 @@ export default defineComponent({
 </template>
 
 <style scoped lang="sass">
+.middle-row
+  display: flex
+
+  flex-direction: row
+  justify-content: space-between
+  align-items: center
+  @media screen and (max-width: 700px)
+    flex-direction: column
+    align-items: start
 
 .other-list
   display: flex
@@ -247,7 +256,7 @@ export default defineComponent({
     border-radius: 1rem
     background: #FFF
     padding: 0.6875rem
-    width: 12rem
+    min-width: 6rem
     height: 3rem
     display: flex
     align-items: center
@@ -271,9 +280,11 @@ export default defineComponent({
   justify-content: space-between
   margin-top: 1rem
   p:not(:last-child)
-    width: 20rem
+    width: 30%
+    align-self: center
   p:last-child
     width: 5rem
+    align-self: center
   &:hover
     background: #D0D0D0
 .main-container
@@ -289,6 +300,8 @@ export default defineComponent({
  flex-direction: column
  overflow-x: hidden
  color: #2D2D2D
+ @media screen and (max-width: 700px)
+    padding: 2rem
 
  & > *:not(:first-child)
   margin-top: 1rem
@@ -298,6 +311,7 @@ export default defineComponent({
   flex-direction: row
   justify-content: space-between
   align-items: center
+  
 
   .name
     dispaly: flex
@@ -353,6 +367,7 @@ export default defineComponent({
   .s-column
     display: flex
     flex-direction: column
+    margin-left: 2rem
     div:not(:first-child)
       margin-top: 1rem
   div

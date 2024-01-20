@@ -12,8 +12,15 @@
   color: #2D2D2D
   font-weight: 600
 
-.background 
+.background-auth
   background-image: url("../assets/auth-background.svg")
+  background-repeat: no-repeat
+  background-size: cover
+  height: 100vh
+  display: flex
+  align-items: center
+  justify-content: center
+.background
   background-repeat: no-repeat
   background-size: cover
   height: 100vh
@@ -23,7 +30,7 @@
 
 .columns 
   display: flex
-  justify-content: space-between
+  
   width: 95%
   height: 90vh
   margin-top: 2rem
@@ -33,6 +40,9 @@
   flex: 1
   background-color: red
   margin-top: 6rem
+  @media screen and (max-width: 1600px)
+    display: none
+    visibility: hidden
 
   
     
@@ -40,12 +50,17 @@
   flex: 1.8
   
   margin-right: 2rem
+  @media screen and (max-width: 1200px)
+    margin-top: 2rem
+    margin-right: 0
  
 .loading
   position: absolute
   bottom: 50%
   height: 90px
   left: 30%
+  @media screen and (max-width: 1200px)
+    left: 45%
 p
   margin: 0
 
