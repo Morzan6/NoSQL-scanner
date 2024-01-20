@@ -1,6 +1,7 @@
 <script>
 import { defineComponent } from "vue";
 import smallScan from "../../components/smallScan.vue";
+import startScan from "../../components/startScan.vue";
 import requestSender from "components/request-sender";
 import formatTimeDelta from "../timedelta.js";
 
@@ -12,7 +13,7 @@ export default defineComponent({
     window.addEventListener("resize", this.setChunkSize);
   },
   name: "ScansPage",
-  components: { smallScan },
+  components: { smallScan, startScan },
   component: ["smallScan"],
   methods: {
     setChunkSize() {
@@ -60,13 +61,14 @@ export default defineComponent({
       currentPage: 0,
       chunkSize: 7,
       isLoading: true,
+      openStart: false
     };
   },
 
   beforeMount() {
     const resp = requestSender(
       "get",
-      process.env.API + "/scan/my/", 
+      process.env.API + "/scan/my/",
       {},
       localStorage.getItem("access_token")
     );
@@ -84,6 +86,10 @@ export default defineComponent({
   <q-page-container class="background">
     <div class="columns">
       <div class="scans-column">
+        <button class="mobile-start-scan" @click="openStart = !openStart">
+          Сканировать 
+        </button>
+        <startScan class="start-modal" v-if="openStart"/>
         <img class="loading" src="/loading3.svg" v-if="isLoading" />
         <smallScan
           v-for="s in chunkedScans()[this.currentPage]"
@@ -117,7 +123,9 @@ export default defineComponent({
         </div>
       </div>
 
-      <div class="start-scan-column">{{ this.currentPage }}</div>
+      <div class="start-scan-column">
+        <startScan />
+      </div>
     </div>
   </q-page-container>
 </template>

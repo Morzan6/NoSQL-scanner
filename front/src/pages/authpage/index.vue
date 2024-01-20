@@ -2,7 +2,7 @@
 import { defineComponent } from "vue";
 import requestSender from "components/request-sender";
 import { useQuasar } from "quasar";
-import { useCounterStore } from 'stores/auth';
+import { useCounterStore } from "stores/auth";
 
 export default defineComponent({
   setup() {
@@ -24,33 +24,47 @@ export default defineComponent({
     };
   },
   methods: {
+    verify() {
+      let isOk = true;
+      const usernamePattern = /^[A-Za-z0-9_@!]{4,25}$/;
+      if (usernamePattern.test(this.name) !== true) {
+        console.log("asdsad");
+        isOk = false;
+        this.showNotify(
+          "Имя пользователя должно быть длиной от 4 до 25 символов и может состоять только цифр, латинских букв и символов _@!"
+        );
+      }
+      if (this.password.length < 8) {
+        isOk = false;
+        this.showNotify("Длина пароля должна быть больше 8 символов");
+      }
+
+      return isOk;
+    },
     onSubmitLogin() {
       const store = useCounterStore();
-      const resp = requestSender(
-        "post",
-        process.env.API+"/auth/login/",
-        {
-          username: this.name,
-          password: this.password,
-        }
-      );
-      resp
-        .then((res) => {
-          localStorage.access_token = res.data.access_token;
-          store.isLogin = true;
-          this.$router.go("/auth")
-        })
-        .catch((err) => this.showNotify(err.response.data.detail));
-      
-    },
-    onSubmitReg() {
-      const resp = requestSender("post", process.env.API + "/auth/create/", {
+      const resp = requestSender("post", process.env.API + "/auth/login/", {
         username: this.name,
         password: this.password,
       });
       resp
-        .then((res) => this.onSubmitLogin())
+        .then((res) => {
+          localStorage.access_token = res.data.access_token;
+          store.isLogin = true;
+          this.$router.go("/auth");
+        })
         .catch((err) => this.showNotify(err.response.data.detail));
+    },
+    onSubmitReg() {
+      if (this.verify() === true) {
+        const resp = requestSender("post", process.env.API + "/auth/create/", {
+          username: this.name,
+          password: this.password,
+        });
+        resp
+          .then((res) => this.onSubmitLogin())
+          .catch((err) => this.showNotify(err.response.data.detail));
+      }
     },
   },
 });
@@ -143,23 +157,21 @@ export default defineComponent({
   margin-bottom: 41px
 
 // Media query for smaller screens
-@media screen and (max-width: 600px) 
+@media screen and (max-width: 600px)
   .auth-list
     padding: 2rem
     margin: 0 1rem 0
-    
+
   .input, .sub-button
     width: 100%   // Adjust width to 100% for smaller screens
-  
+
   .col-6:not(:last-child)
     flex: 1
     .sub-button
-      
+
       width: 100%
   .col-6:not(:first-child)
     flex: 2
     .sub-button
         width: 150%
-
-
 </style>

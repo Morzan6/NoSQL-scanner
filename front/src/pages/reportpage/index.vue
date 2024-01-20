@@ -4,12 +4,13 @@ import axios from "axios";
 import formatTimeDelta from "../timedelta.js";
 import chart from "../../components/chart.vue";
 import modalCVE from "../../components/modalСVE.vue";
+import startScan from "../../components/startScan.vue";
 import modalOtherVulns from "../../components/modalOtherVulns.vue";
 
 export default defineComponent({
   name: "ReportPage",
   props: ["id"],
-  components: { chart, modalCVE, modalOtherVulns },
+  components: { chart, modalCVE, modalOtherVulns, startScan },
   component: ["chart"],
   data() {
     return {
@@ -17,6 +18,7 @@ export default defineComponent({
       isLoading: true,
       modalOpen: [],
       modalOtherOpen: false,
+      openStart: false
     };
   },
   beforeMount() {
@@ -117,6 +119,10 @@ export default defineComponent({
   <q-page-container class="background">
     <div class="columns">
       <div class="scans-column">
+        <button class="mobile-start-scan" @click="openStart = !openStart">
+          Сканировать 
+        </button>
+        <startScan class="start-modal" v-if="openStart"/>
         <img class="loading" src="/loading3.svg" v-if="isLoading" />
         <div class="main-container" v-if="!isLoading">
           <div class="row">
@@ -229,21 +235,27 @@ export default defineComponent({
           </div>
         </div>
       </div>
-      <div class="start-scan-column">scanning component</div>
+      <div class="start-scan-column"><startScan /></div>
     </div>
   </q-page-container>
 </template>
 
 <style scoped lang="sass">
+.chart
+  @media screen and (max-width: 700px)
+    margin-top: 1rem
+    
 .middle-row
   display: flex
 
   flex-direction: row
   justify-content: space-between
   align-items: center
+
   @media screen and (max-width: 700px)
     flex-direction: column
     align-items: start
+    
 
 .other-list
   display: flex
@@ -293,7 +305,7 @@ export default defineComponent({
  width: inherit
  box-shadow: 0px 27px 104.6px 0px rgba(0, 0, 0, 0.05)
  display: flex
- padding: 4rem
+ padding: 3rem
  height: 90vh
  border-radius: 0.9rem
  overflow: auto
@@ -311,6 +323,7 @@ export default defineComponent({
   flex-direction: row
   justify-content: space-between
   align-items: center
+  
   
 
   .name

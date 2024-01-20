@@ -38,8 +38,7 @@
 
 .start-scan-column
   flex: 1
-  background-color: red
-  margin-top: 6rem
+  margin-top: 5rem
   @media screen and (max-width: 1600px)
     display: none
     visibility: hidden
@@ -50,7 +49,7 @@
   flex: 1.8
   
   margin-right: 2rem
-  @media screen and (max-width: 1200px)
+  @media screen and (max-width: 1600px)
     margin-top: 2rem
     margin-right: 0
  
@@ -70,11 +69,40 @@ p
   margin-right: 100rem
   border-radius: 0.7rem
 
-*::-webkit-scrollbar-track
-
-
 *::-webkit-scrollbar-thumb
   background-color: rgba(0, 0, 0, .24)
   border-radius: 8px
   padding: 1rem
   border: none
+
+.mobile-start-scan
+  border: none
+  width: 100%
+  color: #2D2D2D
+  background: #FFF
+  padding: 1.2rem 1rem 1.2rem
+  font-size: 26px
+
+  align-items: center
+  justify-content: center
+
+  border-radius: 0.6875rem
+  display: flex
+
+  box-shadow: 0px 27px 104.6px 0px rgba(0, 0, 0, 0.05)
+  margin-bottom: 1rem
+
+  @media screen and (min-width: 1600px)
+    display: none
+    visibility: hidden
+.start-modal
+  position: fixed
+  display: flex
+  justify-self: center
+  z-index: 50
+  top: 1
+  left: 4
+  box-shadow: 0px 27px 104.6px 0px rgba(0, 0, 0, 0.25)
+  @media screen and (min-width: 1600px)
+    display: none
+    visibility: hidden

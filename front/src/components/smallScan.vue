@@ -54,6 +54,7 @@ export default defineComponent({
     text-overflow: ellipsis
 
     align-items: center
+    flex-shrink: 2
     justify-content: space-between
     @media screen and (max-width: 900px)
       justify-content: start

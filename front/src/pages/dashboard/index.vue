@@ -2,12 +2,13 @@
 import { defineComponent } from "vue";
 import chart from "../../components/chart.vue";
 import dashboardScan from "../../components/dashboardScan.vue";
+import startScan from "../../components/startScan.vue";
 import axios from "axios";
 import formatTimeDelta from "../timedelta.js";
 
 export default defineComponent({
   name: "DashboardPage",
-  components: { chart, dashboardScan },
+  components: { chart, dashboardScan, startScan },
   component: ["chart", "dashboardScan"],
   beforeMount() {
     axios({
@@ -53,6 +54,7 @@ export default defineComponent({
     return {
       dashboardScans: [],
       isLoading: true,
+      openStart: false,
     };
   },
   methods: {
@@ -98,10 +100,17 @@ export default defineComponent({
   <q-page-container class="background">
     <div class="columns">
       <div class="scans-column">
+        <button class="mobile-start-scan" @click="openStart = !openStart">
+          Сканировать 
+        </button>
+        <startScan class="start-modal" v-if="openStart"/>
         <img class="loading" src="/loading3.svg" v-if="isLoading" />
+        <div v-if="this.dashboardScans.length === 0 && !isLoading" class="emptyScan">
+          У вас еще нет сканов
+        </div>
         <div v-for="scan in this.dashboardScans" :key="scan.id">
           <div class="bar">
-            <chart
+            <chart class="chart"
               :id="scan.id"
               :countLow="this.countScore(scan).LOW"
               :countMedium="this.countScore(scan).MEDIUM"
@@ -121,12 +130,31 @@ export default defineComponent({
           </div>
         </div>
       </div>
-      <div class="start-scan-column">scanning component</div>
+      <div class="start-scan-column"><startScan /></div>
     </div>
   </q-page-container>
 </template>
 
 <style scoped lang="sass">
+.chart
+  @media screen and (max-width: 800px)
+    visibility: hidden
+    display: none
+.emptyScan
+    width: inherit
+    color: #2D2D2D
+    background: #FFF
+    padding: 1.2rem 1rem 1.2rem
+    font-size: 26px
+
+    align-items: center
+    justify-content: center
+
+    border-radius: 0.6875rem
+    display: flex
+
+    box-shadow: 0px 27px 104.6px 0px rgba(0, 0, 0, 0.05)
+    margin-bottom: 1rem
 .bar
   display: flex
 </style>

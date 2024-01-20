@@ -3,7 +3,7 @@
     <q-toolbar class="flex toolbar justify-around">
       <div class="flex flex-row-gap">
         <menu-button :href="'scans'" :text="'Мои сканы'" />
-        <menu-button :href="'dashboard'" :text="'Доска'" />
+        <menu-button :href="'dashboard'" :text="'Панель'" />
       </div>
       <div v-if="!checkIfLogin()">
         <menu-button :href="'auth'" :text="text" @click="this.$router.go('/auth'); this.text = 'Вход'"/>
@@ -76,7 +76,7 @@ export default defineComponent({
 
 
   /* Устройства с большим экраном (компьютеры, 1200px и выше) */
-  @media (min-width: 1200px)
+  @media (min-width: 1600px)
     width: 36%
     /* Стили для устройств с шириной viewport >1200px */
 

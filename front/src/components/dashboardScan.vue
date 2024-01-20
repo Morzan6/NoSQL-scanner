@@ -151,6 +151,10 @@ p
  @media screen and (max-width: 1200px)
   width: 34rem
  @media screen and (max-width: 900px)
+  width: 110%
+ @media screen and (max-width: 800px)
+  width: 140%
+ @media screen and (max-width: 600px)
   width: 100%
  
 .button
