@@ -1,6 +1,6 @@
 {
   "name": "nosqlscanner",
-  "version": "0.0.1",
+  "version": "0.2.1",
   "description": "Simple scanner for NoSQL Databases",
   "productName": "NoSQL-scanner",
   "author": "druZhba",
@@ -34,7 +34,7 @@
     "eslint-plugin-vue": "^9.0.0",
     "postcss": "^8.4.14",
     "prettier": "^2.5.1",
-    "vite": "^2.9.15",
+    "vite": "^2.9.17",
     "workbox-build": "^7.0.0",
     "workbox-cacheable-response": "^7.0.0",
     "workbox-core": "^7.0.0",
