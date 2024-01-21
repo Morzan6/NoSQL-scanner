@@ -20,6 +20,8 @@ services:
       dockerfile: Dockerfile
       context: front
     container_name: frontend
+    environment:
+      - BACKEND_URL="http://localhost:8000"
     depends_on:
       - backend
     networks:

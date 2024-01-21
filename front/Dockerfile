@@ -13,7 +13,7 @@ WORKDIR /app
 
 RUN npm i -g @quasar/cli
 
-COPY --from=builder /app/dist/spa ./dist/spa
+COPY --from=builder /app/dist/pwa ./dist/pwa
 
 EXPOSE 4000
-ENTRYPOINT ["quasar", "serve", "dist/spa"]
+ENTRYPOINT ["quasar", "serve", "dist/pwa"]
