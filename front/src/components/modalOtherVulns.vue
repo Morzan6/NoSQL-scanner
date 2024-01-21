@@ -44,7 +44,7 @@ export default defineComponent({
 
 .modal
     position: fixed
-
+    z-index: 50
     top: 0
     left: 0
     width: 100%
@@ -58,7 +58,7 @@ export default defineComponent({
 
 .modal-content
     display: flex
-
+    z-index: 50
     background: #FFF
     padding: 20px
     width: 80rem

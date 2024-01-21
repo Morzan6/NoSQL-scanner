@@ -107,7 +107,7 @@ button
 
 .modal-content
     display: flex
-
+    z-index: 50
     background: #FFF
     padding: 20px
     width: 80rem

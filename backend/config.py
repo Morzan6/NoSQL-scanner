@@ -5,6 +5,7 @@ VERSION = "0.1"
 ORIGINS = [
     "http://localhost",
     "http://localhost:9000",
+    "http://127.0.0.1:4000",
     "https://predprof.tawt.fun/"
 ]
 

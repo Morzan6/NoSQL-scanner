@@ -11,7 +11,7 @@
     "format": "prettier --write \"**/*.{js,vue,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev --mode pwa",
-    "build": "quasar build --mode pwa"
+    "build": "quasar build --mode spa"
   },
   "dependencies": {
     "@canvasjs/vue-charts": "^1.0.1",

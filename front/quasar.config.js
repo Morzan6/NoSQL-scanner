@@ -54,13 +54,13 @@ module.exports = configure(function (ctx) {
       },
 
       vueRouterMode: "history", // available values: 'hash', 'history'
-      // vueRouterBase,
+      vueRouterBase: "/",
       // vueDevtools,
       // vueOptionsAPI: false,
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      // publicPath: '/',
+      publicPath: '/',
       // analyze: true,
       env: {
         API: ctx.dev
@@ -135,7 +135,7 @@ module.exports = configure(function (ctx) {
       // extendSSRWebserverConf (esbuildConf) {},
       // extendPackageJson (json) {},
 
-      pwa: false,
+      pwa: true,
 
       // manualStoreHydration: true,
       // manualPostHydrationTrigger: true,
@@ -151,7 +151,7 @@ module.exports = configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli/developing-pwa/configuring-pwa
     pwa: {
       workboxMode: "injectManifest", // or 'injectManifest'
-      injectPwaMetaTags: true,
+      injectPwaMetaTags: false,
       swFilename: "sw.js",
       manifestFilename: "manifest.json",
       useCredentialsForManifestTag: false,

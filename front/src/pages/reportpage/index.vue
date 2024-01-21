@@ -327,7 +327,7 @@ export default defineComponent({
   
 
   .name
-    dispaly: flex
+    display: flex
     max-width: 28rem
     font-size: 36px
     font-weight: 600
