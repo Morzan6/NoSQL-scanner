@@ -3,6 +3,7 @@ from typing import List
 import requests
 import re
 import os
+from scans import scan1, scan2, scan3
 from concurrent.futures import ThreadPoolExecutor
 
 
@@ -40,7 +41,7 @@ def translate(text: str) -> str:
     return response["translations"][0]["text"]
 
 
-def _process_cve(cve: dict) -> dict:
+def _process_cve(cve: dict, translate_flag: bool = False) -> dict:
     global known_recs
     id = cve["id"]
     r = requests.get(f"https://v1.cveapi.com/{id}.json").json()
@@ -62,6 +63,8 @@ def _process_cve(cve: dict) -> dict:
     return {
         "id": id,
         "description": translate(cve["description"])
+        if translate_flag
+        else cve["description"]
         if cve["description"]
         else translate(r["cve"]["description"]["description_data"][0]["value"]),
         "versions": r["configurations"]["nodes"],
@@ -137,9 +140,14 @@ def parse_service(s: str) -> dict:
 
 
 TOKEN = ""
-YP_TOKEN = os.environ.pop('YP_TOKEN')
-
+YP_TOKEN = (
+    os.getenv("YP_TOKEN")
+    or "y0_AgAAAAAmBdaJAATuwQAAAAD3eEAr6yvk4eLsRJ2SN3ddbl_HbQjpLRs"
+)
 if not YP_TOKEN:
     raise ValueError("Could not get yandex translator YP token")
+known_recs = json.load(open("cves.json", "r"))
 
-known_recs = json.load(open(os.path.join(os.path.dirname(__file__), "cves.json"), "r"))
+if __name__ == "__main__":
+    res = parse_service(scan1)
+    print(json.dumps(res))
