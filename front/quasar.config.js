@@ -65,7 +65,7 @@ module.exports = configure(function (ctx) {
       env: {
         API: ctx.dev
           ? "http://127.0.0.1:8000/api"
-          : "https://predprof.tawt.fun/api",
+          : process.env.BACKEND_URL,
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
@@ -150,7 +150,7 @@ module.exports = configure(function (ctx) {
 
     // https://v2.quasar.dev/quasar-cli/developing-pwa/configuring-pwa
     pwa: {
-      workboxMode: "generateSW", // or 'injectManifest'
+      workboxMode: "injectManifest", // or 'injectManifest'
       injectPwaMetaTags: true,
       swFilename: "sw.js",
       manifestFilename: "manifest.json",
