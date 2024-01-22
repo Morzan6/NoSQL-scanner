@@ -63,9 +63,7 @@ module.exports = configure(function (ctx) {
       publicPath: '/',
       // analyze: true,
       env: {
-        API: ctx.dev
-          ? "http://127.0.0.1:8000/api"
-          : process.env.BACKEND_URL,
+        API: process.env.BACKEND_URL
       },
       // rawDefine: {}
       // ignorePublicFolder: true,

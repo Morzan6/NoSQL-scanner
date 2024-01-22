@@ -1,6 +1,7 @@
 FROM node:21.5.0-alpine3.19 AS builder
+ARG BACKEND_URL
+ENV BACKEND_URL=${BACKEND_URL}
 WORKDIR /app
-ENV BACKEND_URL="http://localhost/api"
 
 COPY package.json package.json
 RUN npm install

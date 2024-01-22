@@ -204,6 +204,7 @@ src-ssr
 .eslintrc.*
 .index.vue.swp
 
+ansible
 volumes
 database.db
 docker-compose-prod.yaml

@@ -19,9 +19,9 @@ services:
     build: 
       dockerfile: Dockerfile
       context: front
+      args:
+        - BACKEND_URL: "http://localhost/api"
     container_name: frontend
-    environment:
-      - BACKEND_URL="http://localhost:8000"
     depends_on:
       - backend
     networks:
