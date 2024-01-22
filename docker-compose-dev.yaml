@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
       context: front
       args:
-        - BACKEND_URL: "http://localhost/api"
+        - BACKEND_URL=http://localhost/api
     container_name: frontend
     depends_on:
       - backend
