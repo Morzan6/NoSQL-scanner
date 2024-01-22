@@ -87,26 +87,26 @@ export default defineComponent({
 
 <template>
   <q-list class="auth-list">
-    <q-item class="header-text text-align-center">
+    <div class="header-text text-align-center">
       Сканировать
       <img src="../assets/strip.svg" style="width: 100%; align-self: center" />
-    </q-item>
-    <q-item>
+    </div>
+    <div>
       <input class="input default-text" placeholder="IP" v-model="ip" />
-    </q-item>
-    <q-item>
+    </div>
+    <div>
       <input class="input default-text" placeholder="Порт" v-model="port" />
-    </q-item>
-    <q-item>
+    </div>
+    <div>
       <input class="input default-text" placeholder="Название" v-model="name" />
-    </q-item>
-    <q-item>
+    </div>
+    <div>
       <input
         class="input default-text"
         placeholder="Описание"
         v-model="description"
       />
-    </q-item>
+    </div>
 
     <div class="row">
       <button class="default-text sub-button" @click="onSubmitStart">
@@ -143,6 +143,7 @@ export default defineComponent({
   outline: none
   background-color: #F1F2F5
   color: #434343
+  margin-top: 1rem
 
   &:focus, &:hover
     background-color: #E7E8E8

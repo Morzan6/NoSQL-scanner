@@ -39,6 +39,13 @@ def translate(text: str) -> str:
     ).json()
     return response["translations"][0]["text"]
 
+def _get_description(cve: dict, r: dict, translate_flag: bool) -> str:
+    if translate_flag:
+        if cve["description"]:
+            return translate(cve["description"])
+        else: 
+            return translate(r["cve"]["description"]["description_data"][0]["value"])
+    return cve["description"] if cve["description"] else r["cve"]["description"]["description_data"][0]["value"]
 
 def _process_cve(cve: dict, translate_flag: bool = False) -> dict:
     global known_recs
@@ -61,11 +68,7 @@ def _process_cve(cve: dict, translate_flag: bool = False) -> dict:
     base_severity = r["impact"]["baseMetricV2"]["severity"]
     return {
         "id": id,
-        "description": translate(cve["description"])
-        if translate_flag
-        else cve["description"]
-        if cve["description"]
-        else translate(r["cve"]["description"]["description_data"][0]["value"]),
+        "description": _get_description(cve, r, translate_flag=TRANSLATE),
         "versions": r["configurations"]["nodes"],
         "impact_version": version,
         "base_score_v2": base_score,
@@ -92,8 +95,9 @@ def _process_cves(service: str, cves: List[dict]) -> List[dict]:
 
 
 def parse_service(s: str) -> dict:
-    global TOKEN
-    TOKEN = _get_iam()
+    if TRANSLATE:
+        global TOKEN
+        TOKEN = _get_iam()
     lines = s.split("\n")
     lines = lines[5:]
     port, state, service, reason, *service_display_name, service_version = filter(
@@ -137,7 +141,7 @@ def parse_service(s: str) -> dict:
         "cves": _process_cves(service, cves),
     }
 
-
+TRANSLATE = False
 TOKEN = ""
 YP_TOKEN = os.environ.pop('YP_TOKEN')
 if not YP_TOKEN:

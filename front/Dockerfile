@@ -1,6 +1,6 @@
 FROM node:21.5.0-alpine3.19 AS builder
-ARG BACKEND_URL
-ENV BACKEND_URL=${BACKEND_URL}
+ARG DOMAIN
+ENV BACKEND_URL=http://${DOMAIN}/api
 WORKDIR /app
 
 COPY package.json package.json
