@@ -24,6 +24,10 @@ export default defineComponent({
     };
   },
   methods: {
+    addExpires() {
+      const currentTime = new Date();
+      localStorage.setItem('expires', currentTime.getTime()+86400)
+    },
     verify() {
       let isOk = true;
       const usernamePattern = /^[A-Za-z0-9_@!]{4,25}$/;
@@ -51,9 +55,11 @@ export default defineComponent({
         .then((res) => {
           localStorage.access_token = res.data.access_token;
           store.isLogin = true;
+          this.addExpires();
           this.$router.go("/auth");
         })
         .catch((err) => this.showNotify(err.response.data.detail));
+
     },
     onSubmitReg() {
       if (this.verify() === true) {

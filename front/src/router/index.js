@@ -36,6 +36,11 @@ export default route(function ( { store, ssrContext } ) {
   });
 
   Router.beforeEach((to, from, next) => {
+    const currentTime = new Date()
+    if (currentTime.getTime() > localStorage.getItem('expires')){ 
+      localStorage.clear()
+    }
+
     const store = useCounterStore();
     const publicPages = ['/auth'];
     const authRequired = !publicPages.includes(to.path);

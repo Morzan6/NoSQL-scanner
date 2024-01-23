@@ -100,9 +100,12 @@ def parse_service(s: str) -> dict:
         TOKEN = _get_iam()
     lines = s.split("\n")
     lines = lines[5:]
-    port, state, service, reason, *service_display_name, service_version = filter(
-        lambda x: x != "", lines[0].split()
-    )
+    try:
+        port, state, service, reason, *service_display_name, service_version = filter(
+            lambda x: x != "", lines[0].split()
+        )
+    except:
+        return None
     port, proto = port.split("/")
     lines = lines[1:]
     other_vulns = []

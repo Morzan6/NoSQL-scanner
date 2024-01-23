@@ -47,6 +47,11 @@ class Scanner:
             return None
         parsed = parse_service(self.output)
         
+        if parsed is None:
+            self.scan.status = "FAILED"
+            self.scan.save()
+            return None
+        
         service_type: str = parsed.get('service')
         version: str = parsed.get('version')
         vuln_data = json.dumps({"cves": parsed.get('cves'), "vulns": parsed.get('vulns')})
