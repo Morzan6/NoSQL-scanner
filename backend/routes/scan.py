@@ -8,6 +8,7 @@ from nmap.scanner import Scanner
 import threading
 import json
 from fastapi.responses import FileResponse
+from tools.getpdf import ReportGenerator
 
 ENDPOINT = "scan"
 
@@ -173,4 +174,7 @@ def scan(user: Annotated[User, JWT_PERMISSION], id: int):
             detail="You can not access another user's scan",
         )
     
-    return FileResponse(path='/home/morzan/repos/NoSQL-scanner/backend/static/55.pdf', media_type='application/pdf')
+    rep = ReportGenerator(scan)
+    
+    
+    return {"path": rep.name}
