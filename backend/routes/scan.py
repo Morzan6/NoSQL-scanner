@@ -173,8 +173,10 @@ def scan(user: Annotated[User, JWT_PERMISSION], id: int):
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You can not access another user's scan",
         )
-    
+    if scan.vuln_data == "{}":
+        return {"path": "/404.pdf"}
     rep = ReportGenerator(scan)
     
+    rep.convert()
     
     return {"path": rep.name}

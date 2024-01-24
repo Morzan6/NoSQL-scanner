@@ -18,11 +18,28 @@ export default defineComponent({
       isLoading: true,
       modalOpen: [],
       modalOtherOpen: false,
-      openStart: false
+      openStart: false,
+      linkToReport: ""
     };
   },
   beforeMount() {
     let id = this.$route.params.id;
+
+    axios({
+        method: "get",
+        url: process.env.API + "/scan/report/?id=" + id,
+        data: {},
+        responseType: "json",
+        headers: {
+          ContextType: "application/jsom",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        }, 
+
+      }).then((res) => {
+        this.linkToReport =  "/static" + res.data.path;
+      })
+
+    
 
     axios({
       method: "get",

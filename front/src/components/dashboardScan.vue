@@ -18,7 +18,7 @@
         </div>
     </div>
     <div style="display: flex; justify-content: flex-start">
-        <a class="button" :href="'/static/'">Скачать отчёт</a>
+        <a class="button" :href="linkToPDF">Скачать отчёт</a>
         <a class="button" :href="linkToReport">Подробнее</a>
     </div>
   </div>
@@ -26,6 +26,7 @@
 
 <script>
 import { defineComponent } from "vue";
+import axios from "axios";
 export default defineComponent({
   name: "dashboardScan",
   props: {
@@ -71,7 +72,25 @@ export default defineComponent({
       return `/report/${this.id}`;
     },
   },
-  mounted() {},
+  beforeMount() {
+    axios({
+      method: "get",
+      url: process.env.API + "/scan/report/?id=" + this.id,
+      data: {},
+      responseType: "json",
+      headers: {
+        ContextType: "application/jsom",
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    }).then((res) => {
+      this.linkToPDF = "/static" + res.data.path;
+    });
+  },
+  data() {
+    return {
+      linkToPDF: "",
+    };
+  },
   methods: {},
 });
 </script>

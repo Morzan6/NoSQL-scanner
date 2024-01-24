@@ -44,6 +44,8 @@ export default defineComponent({
               );
               this.dashboardScans = [...newScans].reverse();
               console.log(this.dashboardScans);
+
+              
             })
             .catch((err) => this.showNotify(err.response.data.detail));
         });
