@@ -26,7 +26,7 @@ export default defineComponent({
   methods: {
     addExpires() {
       const currentTime = new Date();
-      localStorage.setItem('expires', currentTime.getTime()+86400)
+      localStorage.setItem('expires', Math.floor(Date.now() / 1000) +86400)
     },
     verify() {
       let isOk = true;

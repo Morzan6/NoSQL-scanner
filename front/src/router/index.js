@@ -37,7 +37,7 @@ export default route(function ( { store, ssrContext } ) {
 
   Router.beforeEach((to, from, next) => {
     const currentTime = new Date()
-    if (currentTime.getTime() > localStorage.getItem('expires')){ 
+    if (Math.floor(Date.now() / 1000) > localStorage.getItem('expires')){ 
       localStorage.clear()
     }
 
