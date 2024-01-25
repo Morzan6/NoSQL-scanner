@@ -3,7 +3,10 @@
 
 ## About NoSQL-scanner
 
-Some description
+Project for Predprof Olympiad 2024. 
+
+Web-App to scan vulnerabilities in NoSQL databases.
+
 
 
 ## Installation
