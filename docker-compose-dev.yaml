@@ -11,6 +11,7 @@ services:
     volumes:
       - ./volumes-dev/db:/NoSQL-Scanner/db
       - ./volumes-dev/static:/NoSQL-Scanner/static
+      - /etc/localtime:/etc/localtime:ro
     networks:
       - nosql-scanner
     restart: always
