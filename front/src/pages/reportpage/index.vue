@@ -344,7 +344,6 @@ export default defineComponent({
   
 
   .name
-    display: flex
     max-width: 28rem
     font-size: 36px
     font-weight: 600
