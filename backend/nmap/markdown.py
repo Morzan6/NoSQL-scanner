@@ -11,18 +11,25 @@ def to_markdown(parse_result: dict):
     for cve in parse_result["cves"]:
         head += "\n### {}\n".format(cve["id"])
         head += "#### Описание\n"
-        head += cve["description"] + "\n"
-        head += "#### Оценка по версии 2\n"
-        head += "Базовая мера: **{}**\n".format(cve["base_score_v2"])
-        head += "Категория: **{}**\n".format(cve["base_severity_v2"])
+        head += cve["description"] + "\n\n"
+        head += "#### Оценка по версии 2\n\n"
+        head += "Базовая мера: **{}**\n\n".format(cve["base_score_v2"])
+        head += "Категория: **{}**\n\n".format(cve["base_severity_v2"])
         if cve["impact_version"] == "V3":
-            head += "#### Оценка по версии 3\n"
-            head += "Базовая мера: **{}**\n".format(cve["base_score_v3"])
-            head += "Категория: **{}**\n".format(cve["base_severity_v3"])
+            head += "#### Оценка по версии 3\n\n"
+            head += "Базовая мера: **{}**\n\n".format(cve["base_score_v3"])
+            head += "Категория: **{}**\n\n".format(cve["base_severity_v3"])
         if cve["rec"]:
-            head += "#### Рекомендации по устранению\n"
+            head += "#### Рекомендации по устранению\n\n"
             head += cve["rec"]
         head += "\n---\n"
+        
+    if parse_result["vulns"]:
+        head += "# Другие уязвимости"
+    for vulndb in parse_result["vulns"]:
+        for vuln in vulndb["vulns"]:
+            head += "\n### {}\n".format(vuln["description"])
+            head += "\n---\n"
     return head
 
 
