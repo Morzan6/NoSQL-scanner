@@ -12,13 +12,14 @@ class ReportGenerator:
             raise ValueError("No vuln_data in the given scan")
         onejson = loads(scan.vuln_data)
         onejson["port"] = scan.port
+        onejson['name'] = scan.name
         onejson["version"] = scan.version
         onejson["display_name"] = scan.type
         onejson["proto"] = "TCP"
         onejson["reason"] = ""
-        self.markdown = to_markdown(parse_service(onejson))
+        self.markdown = to_markdown(onejson)
 
-        self.name = f"/{scan.id}-{scan.ip}.pdf"
+        self.name = f"/{scan.id}-{scan.name.replace(' ', '_')}.pdf"
 
         self.output_path = STATIC_FOLDER + self.name
 
@@ -34,7 +35,7 @@ class ReportGenerator:
         pd.convert_text(
             f"# {self.name}\n\n" + self.markdown,
             "pdf",
-            outputfile=STATIC_FOLDER + "self.name",
+            outputfile=self.output_path,
             format="md",
             extra_args=[
                 "--pdf-engine=xelatex",

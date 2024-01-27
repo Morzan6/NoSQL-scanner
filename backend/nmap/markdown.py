@@ -4,7 +4,7 @@ from json import load
 
 def to_markdown(parse_result: dict):
     vuln_num = sum(map(lambda c: len(c["vulns"]), parse_result["vulns"]))
-    head = f"""**{parse_result['display_name']}** `v{parse_result['version']}` была найдена на порте `{parse_result['port']}`/`{parse_result['proto']}`, используя `{parse_result['reason']}`. Было обнаружено {vuln_num} уязвимостей и {len(parse_result['cves'])} CVE.
+    head = f"""**{parse_result['display_name']}** `v{parse_result['version']}` была найдена на порте `{parse_result['port']}`/`{parse_result['proto']}`. Было обнаружено {vuln_num} уязвимостей и {len(parse_result['cves'])} CVE. \n\n
 """
     if parse_result["cves"]:
         head += "# CVE"
